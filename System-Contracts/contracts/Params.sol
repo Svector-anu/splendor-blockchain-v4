@@ -78,7 +78,7 @@ contract Params {
     }
 
     modifier onlySlashingContract() {
-        require(msg.sender == 0x000000000000000000000000000000000000F003, "Slashing contract only");
+        require(msg.sender == 0x000000000000000000000000000000000000F007, "Slashing contract only");
         _;
     }
 }
