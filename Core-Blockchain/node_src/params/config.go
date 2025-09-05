@@ -43,7 +43,7 @@ var CheckpointOracles = map[common.Hash]*CheckpointOracleConfig{}
 var (
 	// MainnetChainConfig is the chain parameters to run a node on the main network.
 	MainnetChainConfig = &ChainConfig{
-		ChainID:             big.NewInt(128),
+		ChainID:             big.NewInt(2691),
 		HomesteadBlock:      big.NewInt(0),
 		DAOForkBlock:        nil,
 		DAOForkSupport:      true,
@@ -62,7 +62,7 @@ var (
 		ArrowGlacierBlock:   nil,
 
 		Congress: &CongressConfig{
-			Period: 3,
+			Period: 1,
 			Epoch:  200,
 
 			EnableDevVerification: true,
@@ -88,7 +88,7 @@ var (
 		LondonBlock:         big.NewInt(8290000),
 		SophonBlock:         big.NewInt(8290000),
 		Congress: &CongressConfig{
-			Period: 3,
+			Period: 1,
 			Epoch:  200,
 		},
 	}
