@@ -5,7 +5,7 @@ async function testMainnet() {
     console.log('====================================\n');
 
     // Connect to the mainnet
-    const provider = new ethers.JsonRpcProvider('https://splendor-rpc.org/');
+    const provider = new ethers.JsonRpcProvider('https://mainnet-rpc.splendor.org/');
     
     try {
         // Test 1: Check network connection
@@ -28,8 +28,7 @@ async function testMainnet() {
             { name: 'Validators', address: '0x000000000000000000000000000000000000F000' },
             { name: 'Punish', address: '0x000000000000000000000000000000000000F001' },
             { name: 'Proposal', address: '0x000000000000000000000000000000000000F002' },
-            { name: 'Slashing', address: '0x000000000000000000000000000000000000F003' },
-            { name: 'Params', address: '0x000000000000000000000000000000000000F004' }
+            { name: 'Slashing', address: '0x000000000000000000000000000000000000F007' }
         ];
 
         for (const contract of systemContracts) {
@@ -53,10 +52,10 @@ async function testMainnet() {
         try {
             const validatorsContract = new ethers.Contract(
                 '0x000000000000000000000000000000000000F000',
-                ['function getValidators() view returns (address[])'],
+                ['function getActiveValidators() view returns (address[])'],
                 provider
             );
-            const validators = await validatorsContract.getValidators();
+            const validators = await validatorsContract.getActiveValidators();
             console.log(`   ✅ Active validators: ${validators.length}`);
         } catch (error) {
             console.log(`   ⚠️  Could not fetch validator count: ${error.message}`);
@@ -66,8 +65,8 @@ async function testMainnet() {
         console.log('\n📋 Mainnet Information:');
         console.log(`   • Network ID: 2691`);
         console.log(`   • Chain ID: 2691`);
-        console.log(`   • RPC URL: https://splendor-rpc.org/`);
-        console.log(`   • Block Explorer: https://splendor-rpc.org/`);
+        console.log(`   • RPC URL: https://mainnet-rpc.splendor.org/`);
+        console.log(`   • Block Explorer: https://explorer.splendor.org/`);
         console.log(`   • Currency Symbol: SPLD`);
         console.log(`   • Consensus: Congress (Proof of Authority)`);
         console.log(`   • Block Time: ~1 second`);
