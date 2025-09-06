@@ -10,7 +10,7 @@ Splendor RPC is a DPoS (Delegated Proof of Stake) blockchain with the following 
 - **Network Name**: Splendor RPC
 - **RPC URL**: https://mainnet-rpc.splendor.org
 - **Initial Supply**: 26,000,000,000 SPLD (26 billion tokens)
-- **Tiered Validator System**: Bronze, Silver, Gold tiers
+- **Tiered Validator System**: Bronze, Silver, Gold, Platinum tiers
 - **Fair Fee Distribution**: 60% Validators, 30% Stakers, 10% Protocol Development
 
 ## Validator Tiers
@@ -166,6 +166,7 @@ Splendor RPC is a DPoS (Delegated Proof of Stake) blockchain with the following 
 - **Bronze**: 3,947 SPLD (0xD5D238A4ABE98000000)
 - **Silver**: 39,474 SPLD (0x8AC7230489E80000000)
 - **Gold**: 394,737 SPLD (0x56BC75E2D630EB0000000)
+- **Platinum**: 3,947,368 SPLD (0xD5F7A0E3E5D2CC0000000)
 
 ### Fee Distribution
 - **Validator Share**: 60% (60000/100000)

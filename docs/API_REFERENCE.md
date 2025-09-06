@@ -16,7 +16,7 @@ Splendor Blockchain V4 is fully compatible with Ethereum's JSON-RPC API, making 
 | **Currency Symbol** | SPLD |
 | **RPC URL** | https://mainnet-rpc.splendor.org/ |
 | **Block Explorer** | https://explorer.splendor.org/ |
-| **Block Time** | ~1 second |
+| **Block Time** | ~2 seconds |
 | **Consensus** | Congress (PoA) |
 
 ## JSON-RPC API

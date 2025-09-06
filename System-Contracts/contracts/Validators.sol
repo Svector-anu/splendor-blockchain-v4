@@ -20,9 +20,10 @@ contract Validators is Params {
     }
 
     enum ValidatorTier {
-        Bronze,  // 3,947 SPLD minimum
-        Silver,  // 39,474 SPLD minimum  
-        Gold     // 394,737 SPLD minimum
+        Bronze,   // 3,947 SPLD minimum
+        Silver,   // 39,474 SPLD minimum  
+        Gold,     // 394,737 SPLD minimum
+        Platinum  // 3,947,368 SPLD minimum
     }
 
     struct Description {
@@ -64,9 +65,6 @@ contract Validators is Params {
     // total jailed hb
     uint256 public totalJailedHB;
 
-
-
-    mapping(address => address) public contractCreator;
 
     // staker => validator => lastRewardTime
     mapping(address => mapping(address => uint)) public stakeTime;
@@ -157,14 +155,6 @@ contract Validators is Params {
     receive() external payable {
       rewardFund += msg.value;
     }
-    // This contract share of validator gain to creator of contract
-    // It is advised to call this function your contract constructor to avoid intruders
-    function setContractCreator(address _contract ) public returns(bool)
-    {
-        require(contractCreator[_contract] == address(0), "invalid call");
-        contractCreator[_contract] = tx.origin;
-        return true;
-    }
 
     function initialize(address[] calldata vals) external onlyNotInitialized {
         punish = Punish(PunishContractAddr);
@@ -245,6 +235,12 @@ contract Validators is Params {
         // Update validator tier based on new total staking amount
         updateValidatorTier(validator);
         
+        // FIX: Add validator back to currentValidatorSet if they meet requirements
+        // and are not already in the active set (this handles reactivated validators)
+        if (valInfo.coins >= MinimalStakingCoin && !isActiveValidator(validator)) {
+            currentValidatorSet.push(validator);
+        }
+        
         tryAddValidatorToHighestSet(validator, valInfo.coins);
 
         // record staker's info
@@ -314,7 +310,11 @@ contract Validators is Params {
         if (validatorInfo[validator].status == Status.Jailed) {
             require(punish.cleanPunishRecord(validator), "clean failed");
         }
+        
+        // FIX: Set status to Created so they can stake again
         validatorInfo[validator].status = Status.Created;
+        
+        // NOTE: Do NOT add to currentValidatorSet here - only through staking!
 
         emit LogReactive(validator, block.timestamp);
 
@@ -500,7 +500,7 @@ contract Validators is Params {
         uint256 _ownerPart = reward * creatorPartPercent / 100000;
         remaining = remaining - _ownerPart;
         if(_ownerPart > 0){
-            payable(0xbab18a9522d82E4B6583197ea16fe4b3Bbf360bE).transfer(_ownerPart);
+            payable(0xd1D6E4F8777393Ac4dE10067EF6073048da0607d).transfer(_ownerPart);
         }
 
         uint lastRewardHold = reflectionPercentSum[val][lastRewardTime[val]];
@@ -858,7 +858,9 @@ contract Validators is Params {
 
     // Determine validator tier based on staking amount
     function getValidatorTier(uint256 stakingAmount) public pure returns (ValidatorTier) {
-        if (stakingAmount >= GoldValidatorStaking) {
+        if (stakingAmount >= PlatinumValidatorStaking) {
+            return ValidatorTier.Platinum;
+        } else if (stakingAmount >= GoldValidatorStaking) {
             return ValidatorTier.Gold;
         } else if (stakingAmount >= SilverValidatorStaking) {
             return ValidatorTier.Silver;
@@ -912,7 +914,27 @@ contract Validators is Params {
         }
         
         // Transfer slashed amount to protocol treasury
-        payable(0xbab18a9522d82E4B6583197ea16fe4b3Bbf360bE).transfer(slashAmount);
+        payable(0xd1D6E4F8777393Ac4dE10067EF6073048da0607d).transfer(slashAmount);
+    }
+
+    // WRAPPER: Get validator performance from Punish contract
+    function getValidatorMissedBlocks(address validator) external view returns (uint256) {
+        return punish.getPunishRecord(validator);
+    }
+
+    // WRAPPER: Get comprehensive validator performance metrics
+    function getValidatorPerformanceMetrics(address validator) external view returns (
+        uint256 stakeAmount,
+        uint256 missedBlocks,
+        ValidatorTier tier,
+        Status status
+    ) {
+        return (
+            validatorInfo[validator].coins,
+            punish.getPunishRecord(validator),
+            validatorInfo[validator].tier,
+            validatorInfo[validator].status
+        );
     }
 
 }

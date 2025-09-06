@@ -13,7 +13,7 @@ Splendor Blockchain V4 is a production-ready mainnet that combines the best of E
 
 ### Key Features
 
-- **⚡ High Performance**: ~1 second block times with high throughput
+- **⚡ High Performance**: ~2 second block times with high throughput
 - **🔒 Enterprise Security**: Congress consensus with Byzantine fault tolerance
 - **💰 Low Fees**: Minimal transaction costs for all operations
 - **🔗 Ethereum Compatible**: Full EVM compatibility with existing tools
@@ -31,7 +31,7 @@ Splendor Blockchain V4 is a production-ready mainnet that combines the best of E
 | **Chain ID** | 2691 |
 | **Currency Symbol** | SPLD |
 | **Block Explorer** | https://explorer.splendor.org/ |
-| **Block Time** | ~1 second |
+| **Block Time** | ~2 seconds |
 
 ### Connect to Mainnet
 
@@ -85,7 +85,7 @@ npm run verify
 
 ### Congress Consensus
 Splendor uses an enhanced Proof of Authority consensus called "Congress" that provides:
-- **Fast Finality**: Transactions confirmed in ~1 second
+- **Fast Finality**: Transactions confirmed in ~2 seconds
 - **High Security**: Byzantine fault tolerance with validator rotation
 - **Energy Efficient**: No wasteful mining, minimal environmental impact
 - **Ultra-Scalable**: Supports 6,000+ transactions per second with 300M gas limit
@@ -95,7 +95,8 @@ Splendor uses an enhanced Proof of Authority consensus called "Congress" that pr
 |------|----------------|----------|
 | **Bronze** | 3,947 SPLD (~$1,500) | Entry-level validation |
 | **Silver** | 39,474 SPLD (~$15,000) | Enhanced rewards |
-| **Gold** | 394,737 SPLD (~$150,000) | Maximum rewards & governance |
+| **Gold** | 394,737 SPLD (~$150,000) | Premium rewards & governance |
+| **Platinum** | 3,947,368 SPLD (~$1,500,000) | Elite tier with maximum rewards |
 
 ### System Contracts
 Pre-deployed contracts for network governance:
@@ -195,7 +196,7 @@ npx hardhat run scripts/deploy.js --network splendor
 ## 📊 Network Statistics
 
 ### Performance Metrics
-- **Block Time**: ~1 second average
+- **Block Time**: ~2 seconds average
 - **TPS**: 6,000+ transactions per second (300M gas limit)
 - **Finality**: Instant (single block confirmation)
 - **Uptime**: 99.9%+ network availability

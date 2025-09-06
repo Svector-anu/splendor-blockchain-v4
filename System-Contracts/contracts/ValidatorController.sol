@@ -187,7 +187,7 @@ contract ValidatorController is Ownable {
     uint256 public constant PRICE_PRECISION = 100; // For cents precision
     uint256 public lastPriceUpdate;
     address public priceOracle; // Address authorized to update price
-    uint256 public constant PRICE_UPDATE_COOLDOWN = 24 hours; // 24 hour cooldown between price updates
+    uint256 public constant PRICE_UPDATE_COOLDOWN = 6 hours; // 6 hour cooldown between price updates
     
     // Tier-based reward system
     bool public useTierBasedRewards = true; // Use tier-based rewards by default
@@ -199,7 +199,7 @@ contract ValidatorController is Ownable {
         string tierName;             // Tier name for display
     }
     
-    ValidatorTier[3] public validatorTiers;
+    ValidatorTier[4] public validatorTiers;
     
     //events
     event Stake(address validator, uint256 amount, uint256 timestamp);
@@ -234,25 +234,32 @@ contract ValidatorController is Ownable {
         adminList.push(msg.sender);
         
         // Initialize validator tiers based on $0.38 SPLD price
-        // Tier 1: $1,500 ÷ $0.38 = 3,947 SPLD → earns $1,500/year
+        // Bronze Tier: $1,500 ÷ $0.38 = 3,947 SPLD → earns $1,500/year
         validatorTiers[0] = ValidatorTier({
             minStakingAmount: 3947 * 1e18,  // 3,947 SPLD
             annualRewardCents: 150000,      // $1,500 in cents
-            tierName: "Tier 1"
+            tierName: "Bronze"
         });
         
-        // Tier 2: $15,000 ÷ $0.38 = 39,474 SPLD → earns $15,000/year  
+        // Silver Tier: $15,000 ÷ $0.38 = 39,474 SPLD → earns $15,000/year  
         validatorTiers[1] = ValidatorTier({
             minStakingAmount: 39474 * 1e18, // 39,474 SPLD
             annualRewardCents: 1500000,     // $15,000 in cents
-            tierName: "Tier 2"
+            tierName: "Silver"
         });
         
-        // Tier 3: $150,000 ÷ $0.38 = 394,737 SPLD → earns $150,000/year
+        // Gold Tier: $150,000 ÷ $0.38 = 394,737 SPLD → earns $150,000/year
         validatorTiers[2] = ValidatorTier({
             minStakingAmount: 394737 * 1e18, // 394,737 SPLD
             annualRewardCents: 15000000,     // $150,000 in cents
-            tierName: "Tier 3"
+            tierName: "Gold"
+        });
+        
+        // Platinum Tier: $1,500,000 ÷ $0.38 = 3,947,368 SPLD → earns $1,500,000/year
+        validatorTiers[3] = ValidatorTier({
+            minStakingAmount: 3947368 * 1e18, // 3,947,368 SPLD
+            annualRewardCents: 150000000,     // $1,500,000 in cents
+            tierName: "Platinum"
         });
     }
 
@@ -384,8 +391,8 @@ contract ValidatorController is Ownable {
 
     // NEW: Get validator tier reward based on staked amount
     function getValidatorTierReward(uint256 stakedAmount) public view returns(uint256 tierRewardCents) {
-        // Check tiers from highest to lowest
-        for (int256 i = 2; i >= 0; i--) {
+        // Check tiers from highest to lowest (Platinum, Gold, Silver, Bronze)
+        for (int256 i = 3; i >= 0; i--) {
             if (stakedAmount >= validatorTiers[uint256(i)].minStakingAmount) {
                 return validatorTiers[uint256(i)].annualRewardCents;
             }
@@ -404,11 +411,11 @@ contract ValidatorController is Ownable {
     ) {
         (stakedAmount, , ) = valContract.getStakingInfo(validator, validator);
         
-        // Find the validator's current tier
-        for (uint256 i = 2; i >= 0; i--) {
+        // Find the validator's current tier (check from highest to lowest: Platinum, Gold, Silver, Bronze)
+        for (uint256 i = 3; i >= 0; i--) {
             if (stakedAmount >= validatorTiers[i].minStakingAmount) {
                 return (
-                    i + 1, // Tier number (1-based)
+                    i + 1, // Tier number (1-based: 1=Bronze, 2=Silver, 3=Gold, 4=Platinum)
                     validatorTiers[i].tierName,
                     validatorTiers[i].minStakingAmount,
                     validatorTiers[i].annualRewardCents,
@@ -632,7 +639,7 @@ contract ValidatorController is Ownable {
         require(msg.sender == priceOracle || msg.sender == owner(), "Not authorized to update price");
         require(newPriceInCents > 0, "Price must be greater than 0");
         require(newPriceInCents <= 100000, "Price too high (max $1000)"); // Max $1000 per token
-        require(block.timestamp >= lastPriceUpdate + PRICE_UPDATE_COOLDOWN, "Price can only be updated once every 24 hours");
+        require(block.timestamp >= lastPriceUpdate + PRICE_UPDATE_COOLDOWN, "Price can only be updated once every 6 hours");
         
         splendorPriceUSD = newPriceInCents;
         lastPriceUpdate = block.timestamp;
@@ -647,7 +654,7 @@ contract ValidatorController is Ownable {
 
     // NEW: Update validator tier (owner only)
     function updateValidatorTier(uint256 tierIndex, uint256 minStakingAmount, uint256 annualRewardCents, string calldata tierName) external onlyOwner {
-        require(tierIndex < 3, "Invalid tier index");
+        require(tierIndex < 4, "Invalid tier index"); // Now supports 4 tiers (0-3)
         require(minStakingAmount > 0, "Staking amount must be greater than 0");
         require(annualRewardCents > 0, "Reward amount must be greater than 0");
         

@@ -24,6 +24,7 @@ contract Params {
     uint256 public constant BronzeValidatorStaking = 3947 ether;    // ~$1,500
     uint256 public constant SilverValidatorStaking = 39474 ether;   // ~$15,000  
     uint256 public constant GoldValidatorStaking = 394737 ether;    // ~$150,000
+    uint256 public constant PlatinumValidatorStaking = 3947368 ether; // ~$1,500,000
     
     // minimum initial staking to become a validator (Bronze tier)
     uint256 public constant minimumValidatorStaking = BronzeValidatorStaking;
@@ -78,7 +79,7 @@ contract Params {
     }
 
     modifier onlySlashingContract() {
-        require(msg.sender == 0x000000000000000000000000000000000000F007, "Slashing contract only");
+        require(msg.sender == SlashingContractAddr, "Slashing contract only");
         _;
     }
 }

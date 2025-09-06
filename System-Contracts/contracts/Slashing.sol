@@ -319,10 +319,16 @@ contract Slashing is Params {
      */
     function unjailValidator(address validator) external onlyProposalContract {
         require(jailedUntil[validator] > 0, "Validator is not jailed");
+        
+        // FIX: Completely clear the jailed state
         jailedUntil[validator] = 0;
         
-        // Clear slashing status to allow validator to participate again
+        // FIX: Clear slashing status to allow validator to participate again
         slashingRecords[validator].isSlashed = false;
+        
+        // FIX: Reset double sign count to give validator a fresh start
+        slashingRecords[validator].doubleSignCount = 0;
+        slashingRecords[validator].lastSlashTime = 0;
         
         emit ValidatorJailed(validator, 0); // Emit with 0 to indicate unjailed
     }

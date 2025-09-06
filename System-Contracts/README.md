@@ -12,7 +12,7 @@ The difficulty value of a block is 2 when the block is generated normally and 1 
 
 ## Validator Tiers
 
-Splendor RPC implements a three-tier validator system based on staking amounts:
+Splendor RPC implements a four-tier validator system based on staking amounts:
 
 ### Bronze Tier (Entry Level)
 - **Minimum Stake:** 3,947 SPLD (~$1,500)
@@ -29,6 +29,11 @@ Splendor RPC implements a three-tier validator system based on staking amounts:
 - **Target:** Major validators and institutional participants
 - **Benefits:** Maximum network influence and premium rewards
 
+### Platinum Tier (Elite Level)
+- **Minimum Stake:** 3,947,368 SPLD (~$1,500,000)
+- **Target:** Institutional validators and major stakeholders
+- **Benefits:** Elite tier with maximum rewards and governance influence
+
 **Automatic Tier Management:** Validator tiers are automatically assigned and updated based on total staking amount (including delegated stakes). When additional staking occurs, validator tiers are dynamically updated to reflect the new staking level.
 
 ## Fee Distribution
@@ -44,8 +49,8 @@ Splendor RPC uses a transparent and fair fee distribution model:
 ## Glossary 
 - **validator:** Responsible for packaging out blocks for on-chain transactions.
 - **active validator:** The current set of validators responsible for packing out blocks, with a maximum of 10,000.
-- **epoch:** Time interval in blocks, currently 1 epoch = 100 blocks on `Splendor RPC`. At the end of each epoch, the blockchain interacts with the system contracts to update active validators.
-- **tier:** Classification level (Bronze/Silver/Gold) based on validator's total staking amount.
+- **epoch:** Time interval in blocks, currently 1 epoch = 50 blocks on `Splendor RPC`. At the end of each epoch, the blockchain interacts with the system contracts to update active validators.
+- **tier:** Classification level (Bronze/Silver/Gold/Platinum) based on validator's total staking amount.
 - **staker:** Users who delegate their tokens to validators to earn rewards.
 
 The management of the current validators are all done by the system contracts:
@@ -64,6 +69,7 @@ For any account, any number of coins can be staked to the validator. The minimum
 - **Bronze Tier:** 3,947 SPLD minimum
 - **Silver Tier:** 39,474 SPLD minimum  
 - **Gold Tier:** 394,737 SPLD minimum
+- **Platinum Tier:** 3,947,368 SPLD minimum
 
 ### Staking Process:
 1. Choose a validator to stake to

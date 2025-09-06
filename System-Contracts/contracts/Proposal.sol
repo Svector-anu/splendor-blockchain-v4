@@ -158,14 +158,15 @@ contract Proposal is Params {
             lastProposalActive[proposals[id].dst] = false;
 
             // Now make external calls after state is updated
-            // try to reactive validator if it isn't the first time
-            validators.tryReactive(proposals[id].dst);
             
-            // If validator is jailed, unjail them through voting
+            // FIX: Always unjail first if validator is jailed
             if (slashing.isJailed(proposals[id].dst)) {
                 slashing.unjailValidator(proposals[id].dst);
                 emit LogUnjailValidator(proposals[id].dst, block.timestamp);
             }
+            
+            // FIX: Then try to reactive validator (this will add them back to active set)
+            validators.tryReactive(proposals[id].dst);
             
             emit LogPassProposal(id, proposals[id].dst, block.timestamp);
 

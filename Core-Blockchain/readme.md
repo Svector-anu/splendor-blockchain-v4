@@ -61,7 +61,7 @@ Splendor RPC uses a fair fee distribution model:
 ## How to become a validator
 To back the Splendor RPC blockchain you can become a validator. Full flow to become a validator, you must:
 * Install this package **([See Installation](#installation))**
-* Download your newly created validator wallet from your server and import it into your metamask or preferred wallet. Fund this account with the appropriate SPLD tokens needed to become a validator (minimum 3,947 SPLD for Bronze tier). Example command to download the wallet on your local PC. Only works for UNIX-based OSes or on any environment that can run the OpenSSH package:
+* Download your newly created validator wallet from your server and import it into your metamask or preferred wallet. Fund this account with the appropriate SPLD tokens needed to become a validator (minimum 3,947 SPLD for Bronze tier, up to 3,947,368 SPLD for Platinum tier). Example command to download the wallet on your local PC. Only works for UNIX-based OSes or on any environment that can run the OpenSSH package:
 ```bash
   scp -r root@<server_ip>:/root/splendor-blockchain-v4/Core-Blockchain/chaindata/node1/keystore
   scp root@<server_ip>:/root/splendor-blockchain-v4/Core-Blockchain/chaindata/node1/pass.txt
