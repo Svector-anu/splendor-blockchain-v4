@@ -13,7 +13,7 @@ Splendor Blockchain V4 is a production-ready mainnet that combines the best of E
 
 ### Key Features
 
-- **⚡ High Performance**: ~2 second block times with high throughput
+- **⚡ High Performance**: ~1 second block times with high throughput
 - **🔒 Enterprise Security**: Congress consensus with Byzantine fault tolerance
 - **💰 Low Fees**: Minimal transaction costs for all operations
 - **🔗 Ethereum Compatible**: Full EVM compatibility with existing tools
@@ -31,7 +31,7 @@ Splendor Blockchain V4 is a production-ready mainnet that combines the best of E
 | **Chain ID** | 2691 |
 | **Currency Symbol** | SPLD |
 | **Block Explorer** | https://explorer.splendor.org/ |
-| **Block Time** | ~2 seconds |
+| **Block Time** | ~1 second |
 
 ### Connect to Mainnet
 
@@ -85,7 +85,7 @@ npm run verify
 
 ### Congress Consensus
 Splendor uses an enhanced Proof of Authority consensus called "Congress" that provides:
-- **Fast Finality**: Transactions confirmed in ~2 seconds
+- **Fast Finality**: Transactions confirmed in ~1 second
 - **High Security**: Byzantine fault tolerance with validator rotation
 - **Energy Efficient**: No wasteful mining, minimal environmental impact
 - **Ultra-Scalable**: Supports 6,000+ transactions per second with 300M gas limit
@@ -196,7 +196,7 @@ npx hardhat run scripts/deploy.js --network splendor
 ## 📊 Network Statistics
 
 ### Performance Metrics
-- **Block Time**: ~2 seconds average
+- **Block Time**: ~1 second average
 - **TPS**: 6,000+ transactions per second (300M gas limit)
 - **Finality**: Instant (single block confirmation)
 - **Uptime**: 99.9%+ network availability

@@ -42,7 +42,7 @@ This document outlines all changes made to the Splendor Blockchain codebase duri
 - `Core-Blockchain/node_src/metadata/genesis.json`
 
 **Findings:**
-- **Consensus:** Congress PoSA with 2s block time (mainnet), 1s (testnet)
+- **Consensus:** Congress PoSA with 1s block time (mainnet), 1s (testnet)
 - **Chain ID:** 2691 (mainnet), 256 (testnet)
 - **Fork Schedule:** Berlin/London enabled, custom RedCoast/Sophon forks
 - **Gas Limit:** ~300M (very high - recommend monitoring)

@@ -62,7 +62,7 @@ var (
 		ArrowGlacierBlock:   nil,
 
 		Congress: &CongressConfig{
-			Period: 2,
+			Period: 1,
 			Epoch:  50,
 
 			EnableDevVerification: true,
