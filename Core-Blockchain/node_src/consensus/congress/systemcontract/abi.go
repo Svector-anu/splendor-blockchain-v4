@@ -439,6 +439,19 @@ const ValidatorsInteractiveABI = `[
 	},
 	{
 		"inputs": [],
+		"name": "PlatinumValidatorStaking",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "ProposalAddr",
 		"outputs": [
 			{
@@ -508,25 +521,6 @@ const ValidatorsInteractiveABI = `[
 		"outputs": [
 			{
 				"internalType": "address payable",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "contractCreator",
-		"outputs": [
-			{
-				"internalType": "address",
 				"name": "",
 				"type": "address"
 			}
@@ -770,6 +764,59 @@ const ValidatorsInteractiveABI = `[
 				"type": "address"
 			}
 		],
+		"name": "getValidatorMissedBlocks",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "validator",
+				"type": "address"
+			}
+		],
+		"name": "getValidatorPerformanceMetrics",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "stakeAmount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "missedBlocks",
+				"type": "uint256"
+			},
+			{
+				"internalType": "enum Validators.ValidatorTier",
+				"name": "tier",
+				"type": "uint8"
+			},
+			{
+				"internalType": "enum Validators.Status",
+				"name": "status",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "validator",
+				"type": "address"
+			}
+		],
 		"name": "getValidatorStake",
 		"outputs": [
 			{
@@ -995,25 +1042,6 @@ const ValidatorsInteractiveABI = `[
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_contract",
-				"type": "address"
-			}
-		],
-		"name": "setContractCreator",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -1366,6 +1394,19 @@ const PunishInteractiveABI = `[
 	{
 		"inputs": [],
 		"name": "MinimalStakingCoin",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "PlatinumValidatorStaking",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -1895,6 +1936,19 @@ const ProposalInteractiveABI = `[
 	{
 		"inputs": [],
 		"name": "MinimalStakingCoin",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "PlatinumValidatorStaking",
 		"outputs": [
 			{
 				"internalType": "uint256",

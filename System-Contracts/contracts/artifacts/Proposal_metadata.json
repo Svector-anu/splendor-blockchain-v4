@@ -209,6 +209,19 @@
 			},
 			{
 				"inputs": [],
+				"name": "PlatinumValidatorStaking",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "ProposalAddr",
 				"outputs": [
 					{
@@ -632,19 +645,19 @@
 	},
 	"sources": {
 		"Params.sol": {
-			"keccak256": "0xcf0f4b99886e70a62a16e2eef89e2a438921d587219a656b94429c5702c528fb",
+			"keccak256": "0x059768f73637af9c9ec69c5c4a229b1511cecb8b3423b555510c93399fca4bd9",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://9c4109028b9cdaac65128fa9185117df80409b263d513fa8d25c6c3f3d903baf",
-				"dweb:/ipfs/QmSnSja1na7phj98GtpFYC9f4257EZhAbntfiBMszRALnn"
+				"bzz-raw://4e0e70c92a89477b233af4dbf2926b7d902899af5b80cd87fd13fa7270283904",
+				"dweb:/ipfs/QmU8pQBNqSv24YWFogAb62vas7meLaifhv5atg2P9hftZ3"
 			]
 		},
 		"Proposal.sol": {
-			"keccak256": "0x7127ef1a9f8cc54e656690971df7b5c4023a1ded5c9215ffcbc3d13af15291ac",
+			"keccak256": "0xd13c4a4964279de18c7b811b744d3d36a44d25909b0e86249108090aa8b8a183",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://2ba8091d60dd6438ced2a3bb62345dd82c6f65701dea7c8a7aca670c0d7ef33a",
-				"dweb:/ipfs/QmRmUNGJLjeqkdrGGzYQqqRjhxXjPpkzTKnHXsQR2pcduu"
+				"bzz-raw://dbdc16d2018d13c9eb1d493f943383d4dc0b54887a52fd59ed1218bd3ecd0aea",
+				"dweb:/ipfs/QmaWv54NnNmYEdWPVfFXBHL2NxyjNM5fKcxRKdrygcWbr5"
 			]
 		},
 		"Punish.sol": {
@@ -656,11 +669,11 @@
 			]
 		},
 		"Validators.sol": {
-			"keccak256": "0xcdf066b41fd5416e92c1d6c8624acd8c0355c1f48e9a2852cebc0354dd1de44c",
+			"keccak256": "0xf70ed9855b7652b9550ea95feb54163285ce9c8ca6076e753f224561507a2db3",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://1b3cc7294d1b66c0923e25f43fa3d00b0c537c47510fa483867e9ef21552f514",
-				"dweb:/ipfs/QmSgcy1dPCZFPm4AQysCuvGFr3GYn3D4J3nuYoYbmvgzX6"
+				"bzz-raw://cdf67a62f617d58c828e8a217318193865be36c5bad3ff8724159e7c4d1bc803",
+				"dweb:/ipfs/QmRsJ4CRpvSidU8DATEQ9WvxgM1aJgrxMKxR44Bz1nWfSr"
 			]
 		}
 	},

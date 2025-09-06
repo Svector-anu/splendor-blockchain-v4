@@ -59,6 +59,19 @@
 			},
 			{
 				"inputs": [],
+				"name": "PlatinumValidatorStaking",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "ProposalAddr",
 				"outputs": [
 					{
@@ -268,11 +281,11 @@
 	},
 	"sources": {
 		"Params.sol": {
-			"keccak256": "0xcf0f4b99886e70a62a16e2eef89e2a438921d587219a656b94429c5702c528fb",
+			"keccak256": "0x059768f73637af9c9ec69c5c4a229b1511cecb8b3423b555510c93399fca4bd9",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://9c4109028b9cdaac65128fa9185117df80409b263d513fa8d25c6c3f3d903baf",
-				"dweb:/ipfs/QmSnSja1na7phj98GtpFYC9f4257EZhAbntfiBMszRALnn"
+				"bzz-raw://4e0e70c92a89477b233af4dbf2926b7d902899af5b80cd87fd13fa7270283904",
+				"dweb:/ipfs/QmU8pQBNqSv24YWFogAb62vas7meLaifhv5atg2P9hftZ3"
 			]
 		}
 	},
