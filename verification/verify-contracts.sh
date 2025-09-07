@@ -12,7 +12,7 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-RPC_URL="${RPC_URL:-https://mainnet-rpc.splendor.org/}"
+RPC_URL="${RPC_URL:-https://splendor-rpc.org}"
 
 declare -A CONTRACTS=(
     ["Validators"]="0x000000000000000000000000000000000000F000"

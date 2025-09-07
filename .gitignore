@@ -139,3 +139,4 @@ server-configs/
 # Monitoring system (entire folder - contains sensitive tokens)
 monitoring/
 enode-api-server.js
+splendor-rpc.org
