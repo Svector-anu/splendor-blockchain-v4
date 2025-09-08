@@ -273,28 +273,26 @@ restore_validator_files() {
   fi
 }
 
-# Cleanup and rename files
+# Cleanup and remove update files
 cleanup_and_rename() {
-  log_step "Cleaning up and renaming files"
+  log_step "Cleaning up and removing files"
   
   cd /root/
   
-  # Rename tmp directory to .bak
+  # Removing tmp directory
   if [ -d "$TMP_DIR" ]; then
-    log_wait "Renaming tmp directory to tmp.bak"
-    mv "$TMP_DIR" "${TMP_DIR}.bak"
-    log_success "tmp directory renamed to tmp.bak"
+    log_wait "Removing tmp directory"
+    rm -rf "$TMP_DIR"
+    log_success "tmp directory removed"
   fi
   
-  # Rename update.sh to update.sh.bak
+  # Remove update.sh
   if [ -f "/root/update.sh" ]; then
-    log_wait "Renaming update.sh to update.sh.bak"
-    mv "/root/update.sh" "/root/update.sh.bak"
-    log_success "update.sh renamed to update.sh.bak"
+    log_wait "Removing update.sh"
+    rm "/root/update.sh"
+    log_success "update.sh removed"
   elif [ -f "$BASE_DIR/updates/update.sh" ]; then
-    log_wait "Renaming update.sh to update.sh.bak"
-    mv "$BASE_DIR/updates/update.sh" "$BASE_DIR/updates/update.sh.bak"
-    log_success "update.sh renamed to update.sh.bak"
+
   fi
   
   log_success "Cleanup completed"
@@ -356,8 +354,8 @@ main() {
   
   log_success "Splendor blockchain updated successfully"
   log_step "Now starting your $node_type node"
-
-  $CORE_DIR/node-start.sh --$node_type 
+  cd $CORE_DIR
+  ./node-start.sh --$node_type 
 }
 
 # Script execution
