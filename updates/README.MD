@@ -9,11 +9,13 @@ This script automates the process of updating your Splendor Blockchain v4 instal
 - **Progress Tracking**: Visual progress indicators and colored output
 
 ## Usage
-
+```bash
 cd /root && \
 curl -fsSL -H 'Accept: application/vnd.github.raw' \
   "https://api.github.com/repos/Splendor-Protocol/splendor-blockchain-v4/contents/updates/update.sh?ref=main" \
   -o update.sh && chmod +x update.sh && ./update.sh
+
+  ```
 
 
 ## What the Script Does
