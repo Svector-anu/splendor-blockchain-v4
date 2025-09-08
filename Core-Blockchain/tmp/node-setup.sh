@@ -8,9 +8,6 @@ NC='\033[0m' # No Color
 CYAN='\033[0;36m'
 BASE_DIR='/root/splendor-blockchain-v4'
 
-# Flag: skip validator account setup (task8)
-NOPK=false
-
 #########################################################################
 totalRpc=0
 totalValidator=0
@@ -282,7 +279,7 @@ createRpc(){
 }
 
 createValidator(){
-  if [[ $totalValidator -gt 0 && "$NOPK" != "true" ]]; then
+  if [[ $totalValidator -gt 0 ]]; then
       task8
   fi
    i=1
@@ -446,9 +443,7 @@ usage() {
   echo -e " \t\t -v, --verbose   Enable verbose mode"
   echo -e "\t\t --rpc      Specify to create RPC node"
   echo -e "\t\t --validator  <whole number>     Specify number of validator node to create"
-  echo -e "		 --nopk     Skip validator account import/creation (skip task8)"
 }
-
 
 has_argument() {
   [[ ("$1" == *=* && -n ${1#*=}) || (! -z "$2" && "$2" != -*) ]]
@@ -496,11 +491,11 @@ handle_options() {
     # take validator count
     --validator*)
       if ! has_argument $@; then
-        # default to 1 validator if no number provided
-        totalValidator=1
-      else
-        totalValidator=$(extract_argument $@)
+        echo "No number given" >&2
+        usage
+        exit 1
       fi
+      totalValidator=$(extract_argument $@)
       totalNodes=$(($totalRpc + $totalValidator))
       shift
       ;;
@@ -510,11 +505,6 @@ handle_options() {
       doUpdate
       exit 0
       ;;
-      # skip validator account setup (task8)
-      --nopk)
-      NOPK=true
-      ;;
-
 
     *)
       echo "Invalid option: $1" >&2
