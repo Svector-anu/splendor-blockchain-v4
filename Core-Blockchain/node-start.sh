@@ -77,7 +77,7 @@ startRpc(){
         :
     else
         tmux new-session -d -s node$i
-        tmux send-keys -t node$i " ./node_src/build/bin/geth --datadir ./chaindata/node$i --networkid $CHAINID --bootnodes $BOOTNODE --port 30303 --ws --ws.addr $IP --ws.origins '*' --ws.port 8545 --http --http.port 80 --rpc.txfeecap 0  --http.corsdomain '*' --nat 'any' --http.api db,eth,net,web3,personal,txpool,miner,debug --http.addr $IP --vmdebug --pprof --pprof.port 6060 --pprof.addr $IP --gcmode=archive --syncmode=full --txpool.accountslots=10000 --txpool.globalslots=200000 --txpool.accountqueue=10000 --txpool.globalqueue=100000 --ipcpath './chaindata/node$i/geth.ipc' console" Enter
+        tmux send-keys -t node$i " ./node_src/build/bin/geth --datadir ./chaindata/node$i --networkid $CHAINID --bootnodes $BOOTNODE --port 30303 --ws --ws.addr $IP --ws.origins '*' --ws.port 8545 --http --http.port 80 --rpc.txfeecap 0  --http.corsdomain '*' --nat 'any' --http.api db,eth,net,web3,personal,txpool,miner,debug --http.addr $IP --vmdebug --pprof --pprof.port 6060 --pprof.addr $IP --syncmode=full --gcmode=archive --txpool.accountslots=10000 --txpool.globalslots=200000 --txpool.accountqueue=10000 --txpool.globalqueue=100000 --ipcpath './chaindata/node$i/geth.ipc' console" Enter
        
     fi
 

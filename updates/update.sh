@@ -209,7 +209,7 @@ setup_node() {
   if [ "$isValidator" = true ]; then
     log_wait "Setting up validator node with --nopk flag"
     if [ -f "node-setup.sh" ]; then
-      bash node-setup.sh --validator --nopk || {
+      bash node-setup.sh --validator 1 --nopk || {
         log_error "Failed to setup validator node"
         exit 1
       }
@@ -355,7 +355,9 @@ main() {
   echo "╚══════════════════════════════════════════════════════════════╝${NC}"
   
   log_success "Splendor blockchain updated successfully"
-  log_step "You can now start your $node_type node using the appropriate start script"
+  log_step "Now starting your $node_type node"
+
+  $CORE_DIR/node-start.sh --$node_type 
 }
 
 # Script execution
