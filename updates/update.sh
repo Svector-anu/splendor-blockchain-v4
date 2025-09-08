@@ -291,8 +291,6 @@ cleanup_and_rename() {
     log_wait "Removing update.sh"
     rm "/root/update.sh"
     log_success "update.sh removed"
-  elif [ -f "$BASE_DIR/updates/update.sh" ]; then
-
   fi
   
   log_success "Cleanup completed"
