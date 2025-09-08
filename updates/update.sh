@@ -354,6 +354,7 @@ main() {
   log_step "Now starting your $node_type node"
   cd $CORE_DIR
   ./node-start.sh --$node_type 
+  cd $CORE_DIR
 }
 
 # Script execution
