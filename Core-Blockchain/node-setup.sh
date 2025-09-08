@@ -31,6 +31,14 @@ task1(){
 task2(){
   # installing build-essential TASK 2
   log_wait "Getting dependies" && progress_bar
+  
+  # Fix bzip2/libbz2-1.0 version conflict on Ubuntu 24.04
+  if grep -q "24.04" /etc/os-release; then
+    log_wait "Fixing bzip2 dependency conflicts for Ubuntu 24.04"
+    apt install libbz2-1.0=1.0.8-5.1 -y --allow-downgrades 2>/dev/null || true
+    apt install bzip2 -y 2>/dev/null || true
+  fi
+  
   apt -y install build-essential tree
   log_success "Done"
 }
