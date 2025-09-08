@@ -89,9 +89,10 @@ func CalcBaseFee(config *params.ChainConfig, parent *types.Header) *big.Int {
 		
 		result := x.Sub(parentBaseFee, baseFeeDelta)
 		
-		// Ensure base fee never goes below 0
-		if result.Cmp(common.Big0) < 0 {
-			return common.Big0
+		// Ensure base fee never goes below minimum floor (1 Gwei = $0.001 per tx)
+		minimumBaseFee := new(big.Int).SetUint64(params.MinimumBaseFee)
+		if result.Cmp(minimumBaseFee) < 0 {
+			return minimumBaseFee
 		}
 		
 		return result
