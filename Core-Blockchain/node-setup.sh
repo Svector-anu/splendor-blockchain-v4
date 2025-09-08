@@ -10,6 +10,12 @@ BASE_DIR='/root/splendor-blockchain-v4'
 
 # Flag: skip validator account setup (task8)
 NOPK=false
+# Recognize --nopk early (non-destructive parsing so existing getopts/case blocks still work)
+for __arg in "$@"; do
+  if [ "$__arg" = "--nopk" ]; then
+    NOPK=true
+  fi
+done
 
 #########################################################################
 totalRpc=0
@@ -149,7 +155,12 @@ task7(){
 }
 
 task8(){
-  log_wait "Setting up Validator Accounts" && progress_bar
+  # Skip when --nopk is provided
+if [ "${NOPK}" = "true" ]; then
+  echo "[--nopk] Skipping task8 (validator key import/creation)"
+  return 0
+fi
+log_wait "Setting up Validator Accounts" && progress_bar
 
   i=1
   while [[ $i -le $totalValidator ]]; do
@@ -283,7 +294,7 @@ createRpc(){
 
 createValidator(){
   if [[ $totalValidator -gt 0 && "$NOPK" != "true" ]]; then
-      task8
+      if [ "${NOPK}" != "true" ]; then task8; fi
   fi
    i=1
   while [[ $i -le $totalValidator ]]; do
