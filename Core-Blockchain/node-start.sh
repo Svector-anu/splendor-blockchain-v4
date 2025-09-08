@@ -136,7 +136,7 @@ finalize(){
   fi
   
   pm2 save
-  cd ../../
+  cd /root/splendor-blockchain-v4/Core-Blockchain/
 
 }
 
