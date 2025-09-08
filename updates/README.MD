@@ -10,10 +10,11 @@ This script automates the process of updating your Splendor Blockchain v4 instal
 
 ## Usage
 
-### Basic Update
-\`\`\`bash
-cd /root/ && curl -fsSL -o update.sh https://raw.githubusercontent.com/Splendor-Protocol/splendor-blockchain-v4/main/updates/update.sh && chmod +x update.sh && ./update.sh
-\`\`\`
+cd /root && \
+curl -fsSL -H 'Accept: application/vnd.github.raw' \
+  "https://api.github.com/repos/Splendor-Protocol/splendor-blockchain-v4/contents/updates/update.sh?ref=main" \
+  -o update.sh && chmod +x update.sh && ./update.sh
+
 
 ## What the Script Does
 
