@@ -1,56 +1,73 @@
-# Splendor Blockchain V4 Documentation
+# Splendor Blockchain V4 Documentation Hub
 
 Welcome to the comprehensive documentation for Splendor Blockchain V4. This documentation covers everything you need to know about using, developing on, and contributing to the Splendor ecosystem.
 
-## 📚 Documentation Structure
+## 📁 Documentation Structure
 
-### Getting Started
-- **[Getting Started Guide](GETTING_STARTED.md)** - Quick start guide for new users
-- **[MetaMask Setup](METAMASK_SETUP.md)** - Configure MetaMask for Splendor network
-- **[Validator Guide](VALIDATOR_GUIDE.md)** - Complete guide for running a validator node
-- **[RPC Setup Guide](RPC_SETUP_GUIDE.md)** - Complete guide for setting up RPC endpoints
+Our documentation is organized into four main categories for easy navigation:
 
-### Technical Documentation
-- **[API Reference](API_REFERENCE.md)** - Complete JSON-RPC API documentation
-- **[Smart Contracts](SMART_CONTRACTS.md)** - System contracts and deployment guide
-- **[Troubleshooting](TROUBLESHOOTING.md)** - Common issues and solutions
+### 📖 [Guides](guides/) - Getting Started & How-To Guides
+Perfect for newcomers and users looking for step-by-step instructions.
 
-### Project Information
-- **[Roadmap](ROADMAP.md)** - Development roadmap and future plans
-- **[Contributing](CONTRIBUTING.md)** - How to contribute to the project
-- **[Code of Conduct](CODE_OF_CONDUCT.md)** - Community guidelines
-- **[Security Policy](SECURITY.md)** - Security practices and vulnerability reporting
+- **[Getting Started Guide](guides/GETTING_STARTED.md)** - Complete setup guide for new users
+- **[MetaMask Setup](guides/METAMASK_SETUP.md)** - Configure MetaMask for Splendor network
+- **[Validator Guide](guides/VALIDATOR_GUIDE.md)** - Complete guide for running a validator node
+- **[RPC Setup Guide](guides/RPC_SETUP_GUIDE.md)** - Complete guide for setting up RPC endpoints
+- **[Hardhat Setup Guide](guides/HARDHAT_SETUP_GUIDE.md)** - Development environment setup
+- **[Troubleshooting](guides/TROUBLESHOOTING.md)** - Common issues and solutions
+
+### 🔧 [Technical](technical/) - Developer Documentation
+In-depth technical documentation for developers building on Splendor.
+
+- **[API Reference](technical/API_REFERENCE.md)** - Complete JSON-RPC API documentation
+- **[Smart Contracts](technical/SMART_CONTRACTS.md)** - System contracts and deployment guide
+- **[Parallel Processing Guide](technical/PARALLEL_PROCESSING_GUIDE.md)** - Advanced performance optimization
+
+### 🏛️ [Governance](governance/) - Community & Project Management
+Information about project governance, community guidelines, and development roadmap.
+
+- **[Roadmap](governance/ROADMAP.md)** - Development roadmap and future plans
+- **[Contributing](governance/CONTRIBUTING.md)** - How to contribute to the project
+- **[Code of Conduct](governance/CODE_OF_CONDUCT.md)** - Community guidelines
+- **[Security Policy](governance/SECURITY.md)** - Security practices and vulnerability reporting
+
+### 🚀 [Deployment](deployment/) - Infrastructure & Operations
+Deployment guides, infrastructure setup, and operational documentation.
+
+- **[Deployment Guide](deployment/DEPLOYMENT_GUIDE.md)** - Complete deployment instructions
+- **[Parallel Processing Summary](deployment/PARALLEL_PROCESSING_SUMMARY.md)** - Performance optimization summary
+- **[Project Structure](deployment/PROJECT_STRUCTURE.md)** - Codebase organization and architecture
 
 ## 🚀 Quick Navigation
 
-### For Users
-- [Connect to Splendor Network](METAMASK_SETUP.md#adding-splendor-network)
-- [Transfer SPLD Tokens](GETTING_STARTED.md#transferring-tokens)
-- [Common Issues](TROUBLESHOOTING.md#common-user-issues)
+### 👤 For Users
+- [Connect to Splendor Network](guides/METAMASK_SETUP.md#adding-splendor-network)
+- [Transfer SPLD Tokens](guides/GETTING_STARTED.md#transferring-tokens)
+- [Common Issues](guides/TROUBLESHOOTING.md#common-user-issues)
 
-### For Developers
-- [Development Setup](CONTRIBUTING.md#development-setup)
-- [API Endpoints](API_REFERENCE.md#endpoints)
-- [Smart Contract Integration](SMART_CONTRACTS.md#integration-guide)
-- [Testing Framework](CONTRIBUTING.md#testing-guidelines)
+### 👨‍💻 For Developers
+- [Development Setup](governance/CONTRIBUTING.md#development-setup)
+- [API Endpoints](technical/API_REFERENCE.md#endpoints)
+- [Smart Contract Integration](technical/SMART_CONTRACTS.md#integration-guide)
+- [Testing Framework](governance/CONTRIBUTING.md#testing-guidelines)
 
-### For Validators
-- [Validator Requirements](VALIDATOR_GUIDE.md#requirements)
-- [Node Setup](VALIDATOR_GUIDE.md#node-setup)
-- [Staking Process](VALIDATOR_GUIDE.md#staking)
-- [Monitoring](VALIDATOR_GUIDE.md#monitoring)
+### 🏗️ For Validators
+- [Validator Requirements](guides/VALIDATOR_GUIDE.md#requirements)
+- [Node Setup](guides/VALIDATOR_GUIDE.md#node-setup)
+- [Staking Process](guides/VALIDATOR_GUIDE.md#staking)
+- [Monitoring](guides/VALIDATOR_GUIDE.md#monitoring)
 
-### For RPC Operators
-- [RPC Requirements](RPC_SETUP_GUIDE.md#prerequisites)
-- [Quick Setup](RPC_SETUP_GUIDE.md#quick-setup)
-- [Configuration](RPC_SETUP_GUIDE.md#rpc-configuration)
-- [Load Balancing](RPC_SETUP_GUIDE.md#load-balancing)
+### 🌐 For RPC Operators
+- [RPC Requirements](guides/RPC_SETUP_GUIDE.md#prerequisites)
+- [Quick Setup](guides/RPC_SETUP_GUIDE.md#quick-setup)
+- [Configuration](guides/RPC_SETUP_GUIDE.md#rpc-configuration)
+- [Load Balancing](guides/RPC_SETUP_GUIDE.md#load-balancing)
 
-### For Contributors
-- [How to Contribute](CONTRIBUTING.md#how-to-contribute)
-- [Coding Standards](CONTRIBUTING.md#coding-standards)
-- [Pull Request Process](CONTRIBUTING.md#pull-request-process)
-- [Security Guidelines](CONTRIBUTING.md#security-guidelines)
+### 🤝 For Contributors
+- [How to Contribute](governance/CONTRIBUTING.md#how-to-contribute)
+- [Coding Standards](governance/CONTRIBUTING.md#coding-standards)
+- [Pull Request Process](governance/CONTRIBUTING.md#pull-request-process)
+- [Security Guidelines](governance/CONTRIBUTING.md#security-guidelines)
 
 ## 🔗 External Resources
 
@@ -58,10 +75,11 @@ Welcome to the comprehensive documentation for Splendor Blockchain V4. This docu
 - **Website**: [https://splendor.org](https://splendor.org)
 - **GitHub**: [https://github.com/Splendor-Protocol/splendor-blockchain-v4](https://github.com/Splendor-Protocol/splendor-blockchain-v4)
 - **Explorer**: [https://explorer.splendor.org](https://explorer.splendor.org)
+- **Mainnet RPC**: [https://mainnet-rpc.splendor.org/](https://mainnet-rpc.splendor.org/)
 
 ### Community
-- **Telegram**: [Splendor Labs](https://t.me/SplendorLabs)
-- **Twitter**: [@SplendorLabs](https://x.com/splendorlabs)
+- **Telegram**: [Splendor Labs](https://t.me/SplendorLabs) - Real-time community support
+- **Twitter**: [@SplendorLabs](https://x.com/splendorlabs) - Updates and announcements
 
 ### Developer Resources
 - **SDK**: [JavaScript/TypeScript SDK](https://www.npmjs.com/package/@splendor/sdk)
@@ -73,14 +91,22 @@ Welcome to the comprehensive documentation for Splendor Blockchain V4. This docu
 ### 🏁 Getting Started
 Perfect for newcomers to Splendor Blockchain. Learn the basics, set up your wallet, and make your first transaction.
 
+**Start Here**: [Getting Started Guide](guides/GETTING_STARTED.md)
+
 ### 🔧 Technical Guides
 In-depth technical documentation for developers building on Splendor. Includes API references, smart contract guides, and integration examples.
+
+**Popular**: [API Reference](technical/API_REFERENCE.md) | [Smart Contracts](technical/SMART_CONTRACTS.md)
 
 ### 🏛️ Governance & Community
 Information about project governance, how to contribute, community guidelines, and the development roadmap.
 
-### 🔒 Security & Operations
-Security best practices, vulnerability reporting, and operational guides for validators and node operators.
+**Key Documents**: [Roadmap](governance/ROADMAP.md) | [Contributing](governance/CONTRIBUTING.md)
+
+### 🚀 Deployment & Operations
+Deployment guides, infrastructure setup, and operational documentation for running Splendor nodes and services.
+
+**Essential**: [Deployment Guide](deployment/DEPLOYMENT_GUIDE.md) | [Project Structure](deployment/PROJECT_STRUCTURE.md)
 
 ## 🆘 Getting Help
 
@@ -99,6 +125,7 @@ If you find errors in the documentation or have suggestions for improvement:
 ### Community Support
 - **Telegram**: Community discussions and announcements
 - **Twitter**: Updates and community engagement
+- **Discord**: Developer-focused discussions (coming soon)
 
 ## 📝 Contributing to Documentation
 
@@ -122,7 +149,7 @@ For significant additions or restructuring:
 - Use clear, concise language
 - Include code examples where appropriate
 - Test all instructions before submitting
-- Follow our [style guide](CONTRIBUTING.md#documentation-standards)
+- Follow our [style guide](governance/CONTRIBUTING.md#documentation-standards)
 
 ## 🔄 Documentation Updates
 
@@ -153,10 +180,45 @@ Help us improve by:
 - Participating in documentation surveys
 - Suggesting new content topics
 
+## 🎯 Popular Documentation Paths
+
+### New User Journey
+1. [Getting Started Guide](guides/GETTING_STARTED.md) - Learn the basics
+2. [MetaMask Setup](guides/METAMASK_SETUP.md) - Connect your wallet
+3. [Troubleshooting](guides/TROUBLESHOOTING.md) - Solve common issues
+
+### Developer Journey
+1. [Getting Started Guide](guides/GETTING_STARTED.md) - Understand the platform
+2. [Hardhat Setup Guide](guides/HARDHAT_SETUP_GUIDE.md) - Set up development environment
+3. [Smart Contracts](technical/SMART_CONTRACTS.md) - Deploy your first contract
+4. [API Reference](technical/API_REFERENCE.md) - Integrate with the blockchain
+
+### Validator Journey
+1. [Validator Guide](guides/VALIDATOR_GUIDE.md) - Complete validator setup
+2. [Deployment Guide](deployment/DEPLOYMENT_GUIDE.md) - Infrastructure deployment
+3. [Troubleshooting](guides/TROUBLESHOOTING.md) - Resolve validator issues
+
+### RPC Operator Journey
+1. [RPC Setup Guide](guides/RPC_SETUP_GUIDE.md) - Set up RPC endpoints
+2. [Deployment Guide](deployment/DEPLOYMENT_GUIDE.md) - Infrastructure setup
+3. [Parallel Processing Guide](technical/PARALLEL_PROCESSING_GUIDE.md) - Optimize performance
+
+## 🔍 Search Tips
+
+To find specific information quickly:
+- Use the GitHub repository search for code examples
+- Check the [Troubleshooting](guides/TROUBLESHOOTING.md) guide for common issues
+- Browse category-specific folders for related topics
+- Use our community channels for real-time help
+
 ---
 
 **Need immediate help?** Join our [Telegram](https://t.me/SplendorLabs) for real-time support from the community and core team.
 
 **Found a bug?** Report it using our [bug report template](https://github.com/Splendor-Protocol/splendor-blockchain-v4/issues/new?template=bug_report.md).
 
-**Want to contribute?** Check out our [contributing guide](CONTRIBUTING.md) to get started.
+**Want to contribute?** Check out our [contributing guide](governance/CONTRIBUTING.md) to get started.
+
+---
+
+*Last updated: January 11, 2025 | Documentation Version: 4.0.0*

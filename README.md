@@ -68,19 +68,29 @@ npm run verify
 
 **📖 [Complete Documentation Hub](docs/README.md)** - Your one-stop resource for all Splendor documentation
 
-### Quick Links
-- **[Getting Started Guide](docs/GETTING_STARTED.md)** - Complete setup and installation
-- **[MetaMask Setup](docs/METAMASK_SETUP.md)** - Wallet configuration for mainnet
-- **[API Reference](docs/API_REFERENCE.md)** - Complete API documentation
-- **[Smart Contract Development](docs/SMART_CONTRACTS.md)** - Build and deploy contracts
-- **[Validator Guide](docs/VALIDATOR_GUIDE.md)** - Run validators and earn rewards
-- **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Common issues and solutions
+### 📖 User Guides
+- **[Getting Started Guide](docs/guides/GETTING_STARTED.md)** - Complete setup and installation
+- **[MetaMask Setup](docs/guides/METAMASK_SETUP.md)** - Wallet configuration for mainnet
+- **[Validator Guide](docs/guides/VALIDATOR_GUIDE.md)** - Run validators and earn rewards
+- **[RPC Setup Guide](docs/guides/RPC_SETUP_GUIDE.md)** - Set up RPC endpoints
+- **[Hardhat Setup Guide](docs/guides/HARDHAT_SETUP_GUIDE.md)** - Development environment setup
+- **[Troubleshooting](docs/guides/TROUBLESHOOTING.md)** - Common issues and solutions
 
-### Project Resources
-- **[Contributing Guide](docs/CONTRIBUTING.md)** - How to contribute to the project
-- **[Security Policy](docs/SECURITY.md)** - Security practices and vulnerability reporting
-- **[Code of Conduct](docs/CODE_OF_CONDUCT.md)** - Community guidelines
-- **[Roadmap](docs/ROADMAP.md)** - Development roadmap and future plans
+### 🔧 Technical Documentation
+- **[API Reference](docs/technical/API_REFERENCE.md)** - Complete API documentation
+- **[Smart Contract Development](docs/technical/SMART_CONTRACTS.md)** - Build and deploy contracts
+- **[Parallel Processing Guide](docs/technical/PARALLEL_PROCESSING_GUIDE.md)** - Advanced performance optimization
+
+### 🏛️ Governance & Community
+- **[Roadmap](docs/governance/ROADMAP.md)** - Development roadmap and future plans
+- **[Contributing Guide](docs/governance/CONTRIBUTING.md)** - How to contribute to the project
+- **[Security Policy](docs/governance/SECURITY.md)** - Security practices and vulnerability reporting
+- **[Code of Conduct](docs/governance/CODE_OF_CONDUCT.md)** - Community guidelines
+
+### 🚀 Deployment & Operations
+- **[Deployment Guide](docs/deployment/DEPLOYMENT_GUIDE.md)** - Complete deployment instructions
+- **[Project Structure](docs/deployment/PROJECT_STRUCTURE.md)** - Codebase organization and architecture
+- **[Parallel Processing Summary](docs/deployment/PARALLEL_PROCESSING_SUMMARY.md)** - Performance optimization summary
 
 ## 🏗️ Architecture
 
@@ -265,19 +275,19 @@ Contract Creation: 1,886,885 gas × 1 gwei = 0.001887 SPLD = $0.000717
 ## 🚀 Getting Started
 
 ### For Users
-1. **Set up MetaMask**: Follow our [MetaMask guide](docs/METAMASK_SETUP.md)
+1. **Set up MetaMask**: Follow our [MetaMask guide](docs/guides/METAMASK_SETUP.md)
 2. **Get SPLD tokens**: Purchase from supported exchanges
 3. **Explore DApps**: Try decentralized applications
 4. **Join Community**: Connect with other users
 
 ### For Developers
-1. **Read Documentation**: Start with [Getting Started](docs/GETTING_STARTED.md)
+1. **Read Documentation**: Start with [Getting Started](docs/guides/GETTING_STARTED.md)
 2. **Set up Environment**: Install required tools
-3. **Deploy Contracts**: Follow [Smart Contract guide](docs/SMART_CONTRACTS.md)
+3. **Deploy Contracts**: Follow [Smart Contract guide](docs/technical/SMART_CONTRACTS.md)
 4. **Build DApps**: Create decentralized applications
 
 ### For Validators
-1. **Review Requirements**: Check [Validator Guide](docs/VALIDATOR_GUIDE.md)
+1. **Review Requirements**: Check [Validator Guide](docs/guides/VALIDATOR_GUIDE.md)
 2. **Acquire Stake**: Get minimum 3,947 SPLD
 3. **Set up Infrastructure**: Deploy validator node
 4. **Start Validating**: Earn rewards and secure the network
@@ -311,9 +321,9 @@ Contract Creation: 1,886,885 gas × 1 gwei = 0.001887 SPLD = $0.000717
 ## 🆘 Support
 
 ### Documentation
-- [Getting Started](docs/GETTING_STARTED.md)
-- [API Reference](docs/API_REFERENCE.md)
-- [Troubleshooting](docs/TROUBLESHOOTING.md)
+- [Getting Started](docs/guides/GETTING_STARTED.md)
+- [API Reference](docs/technical/API_REFERENCE.md)
+- [Troubleshooting](docs/guides/TROUBLESHOOTING.md)
 
 ### Community Support
 - **Telegram**: [Splendor Labs](https://t.me/SplendorLabs) - Real-time community help
