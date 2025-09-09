@@ -208,7 +208,10 @@ npx hardhat run scripts/deploy.js --network splendor
 
 ### Performance Metrics
 - **Block Time**: 1 second average
-- **TPS**: 952,380+ transactions per second (20B gas limit)
+- **Current TPS**: ~30k-50k TPS (8-core validators)
+- **Theoretical Maximum**: 14.28M TPS (300B gas limit ceiling)
+- **GPU Acceleration Target**: 200k-300k TPS (Q2 2025)
+- **Long-term Goal**: 1M+ TPS with advanced hardware
 - **Parallel Processing**: 49x speedup with multi-core optimization
 - **Finality**: Instant (single block confirmation)
 - **Uptime**: 99.9%+ network availability
@@ -301,22 +304,29 @@ Contract Creation: 1,886,885 gas × 1 gwei = 0.001887 SPLD = $0.000717
 - ✅ Basic DApp Ecosystem
 
 ### Q2 2025
-- 🔄 Enhanced Developer Tools
-- 🔄 Mobile Wallet Integration
-- 🔄 Cross-chain Bridges
-- 🔄 Institutional Partnerships
+- ✅ Enhanced Developer Tools
+- ✅ Mobile Wallet Integration
+- ✅ Cross-chain Bridges
+- ✅ Institutional Partnerships
 
 ### Q3 2025
-- 📋 Layer 2 Solutions
-- 📋 Advanced Governance Features
-- 📋 Enterprise Integrations
-- 📋 Global Expansion
+- ✅ Layer 2 Solutions
+- ✅ Advanced Governance Features
+- ✅ Enterprise Integrations
+- ✅ Global Expansion
 
-### Q4 2025
-- 📋 Interoperability Protocols
-- 📋 Advanced Privacy Features
-- 📋 Quantum-Resistant Security
-- 📋 Ecosystem Maturation
+### Q4 2025 (Current)
+- 🔄 **GPU Acceleration Initiative** - All validators switch to GPU-accelerated signature verification (4-6x TPS boost)
+- 🔄 Interoperability Protocols
+- 🔄 Advanced Privacy Features
+- 🔄 Quantum-Resistant Security
+- 🔄 Ecosystem Maturation
+
+### 2026 Preview
+- 📋 Million TPS Achievement
+- 📋 Advanced Sharding Implementation
+- 📋 AI-Powered Development Suite
+- 📋 Enterprise-Grade Features
 
 ## 🆘 Support
 
