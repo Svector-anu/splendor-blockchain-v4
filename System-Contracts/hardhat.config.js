@@ -17,6 +17,48 @@ module.exports = {
   
   defaultNetwork: "hardhat",
   networks: {
-    hardhat: {}
+    hardhat: {},
+    
+    // Splendor Blockchain Network Configuration
+    splendor: {
+      url: "https://mainnet-rpc.splendor.org/",
+      chainId: 2691,
+      // Let Hardhat automatically query gas price from the network
+      gasPrice: "auto", // This will query eth_gasPrice RPC method
+      
+      // Alternative: Use EIP-1559 format (recommended)
+      // maxFeePerGas: "auto",
+      // maxPriorityFeePerGas: "auto",
+      
+      // For testing, you can set accounts if needed
+      // accounts: ["0x..."] // Add private keys for testing
+      
+      // Network timeout settings
+      timeout: 60000,
+      
+      // Gas settings
+      gas: "auto",
+      gasMultiplier: 1.2, // Add 20% buffer to gas estimates
+    },
+    
+    // Local development network (if running locally)
+    local: {
+      url: "http://localhost:80",
+      chainId: 2691,
+      gasPrice: "auto",
+      gas: "auto",
+      gasMultiplier: 1.2,
+    }
+  },
+  
+  // Global gas settings
+  gasReporter: {
+    enabled: true,
+    currency: 'USD',
+  },
+  
+  // Mocha timeout for tests
+  mocha: {
+    timeout: 60000
   }
 };

@@ -16,22 +16,30 @@ Splendor RPC is a DPoS (Delegated Proof of Stake) blockchain with the following 
 ## Validator Tiers
 
 ### Bronze Tier (Entry Level)
-- **Minimum Stake**: 3,947 SPLD (~$1,500)
+- **Minimum Stake**: 3,947 SPLD
 - **Target**: New validators and smaller participants
+- **Benefits**: Basic block rewards and gas fee distribution
 
 ### Silver Tier (Mid Level)
-- **Minimum Stake**: 39,474 SPLD (~$15,000)
+- **Minimum Stake**: 39,474 SPLD
 - **Target**: Committed validators with higher investment
+- **Benefits**: 25% higher rewards than Bronze tier, enhanced network priority
 
 ### Gold Tier (Premium Level)
-- **Minimum Stake**: 394,737 SPLD (~$150,000)
+- **Minimum Stake**: 394,737 SPLD
 - **Target**: Major validators and institutional participants
+- **Benefits**: 50% higher rewards than Bronze tier, governance participation
+
+### Platinum Tier (Elite Level)
+- **Minimum Stake**: 3,947,368 SPLD
+- **Target**: Enterprise validators and major institutional participants
+- **Benefits**: 100% higher rewards than Bronze tier, maximum governance weight, priority operations
 
 ## Fee Distribution
 
 - **60%** to Validators (infrastructure operators)
 - **30%** to Stakers (delegators)
-- **10%** to Protocol Development (`0xbab18a9522d82E4B6583197ea16fe4b3Bbf360bE`)
+- **10%** to Protocol Development (`0xd1D6E4F8777393Ac4dE10067EF6073048da0607d`)
 
 ## Pre-Deployment Checklist
 
@@ -172,7 +180,7 @@ Splendor RPC is a DPoS (Delegated Proof of Stake) blockchain with the following 
 - **Validator Share**: 60% (60000/100000)
 - **Staker Share**: 30% (30000/100000)
 - **Owner Share**: 10% (10000/100000)
-- **Owner Address**: `0xbab18a9522d82E4B6583197ea16fe4b3Bbf360bE`
+- **Owner Address**: `0xd1D6E4F8777393Ac4dE10067EF6073048da0607d`
 
 ## Post-Deployment Tasks
 
@@ -257,7 +265,7 @@ Splendor RPC is a DPoS (Delegated Proof of Stake) blockchain with the following 
 ## Conclusion
 
 The Splendor RPC blockchain is now ready for deployment with:
-- ✅ Tiered validator system (Bronze/Silver/Gold)
+- ✅ Tiered validator system (Bronze/Silver/Gold/Platinum)
 - ✅ Fair fee distribution model
 - ✅ No token burning mechanism
 - ✅ Scalable architecture (up to 10,000 validators)

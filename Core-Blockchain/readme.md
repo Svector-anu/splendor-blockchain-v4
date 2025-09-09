@@ -34,17 +34,17 @@ This project aims to provide installation, running, and maintenance capabilities
 Splendor RPC implements a tiered validator system with three levels based on staking amounts:
 
 ### **Bronze Tier** - Entry Level
-- **Minimum Stake:** 3,947 SPLD (~$1,500)
+- **Minimum Stake:** 3,947 SPLD
 - **Target Audience:** New validators and smaller participants
 - **Benefits:** Basic validator rewards and network participation
 
 ### **Silver Tier** - Mid Level  
-- **Minimum Stake:** 39,474 SPLD (~$15,000)
+- **Minimum Stake:** 39,474 SPLD
 - **Target Audience:** Committed validators with higher investment
 - **Benefits:** Enhanced network influence and rewards
 
 ### **Gold Tier** - Premium Level
-- **Minimum Stake:** 394,737 SPLD (~$150,000)
+- **Minimum Stake:** 394,737 SPLD
 - **Target Audience:** Major validators and institutional participants
 - **Benefits:** Maximum network influence and premium rewards
 

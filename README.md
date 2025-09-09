@@ -94,10 +94,10 @@ Splendor uses an enhanced Proof of Authority consensus called "Congress" that pr
 ### Validator Tiers
 | Tier | Stake Required | Benefits |
 |------|----------------|----------|
-| **Bronze** | 3,947 SPLD (~$1,500) | Entry-level validation |
-| **Silver** | 39,474 SPLD (~$15,000) | Enhanced rewards |
-| **Gold** | 394,737 SPLD (~$150,000) | Premium rewards & governance |
-| **Platinum** | 3,947,368 SPLD (~$1,500,000) | Elite tier with maximum rewards |
+| **Bronze** | 3,947 SPLD | Entry-level validation |
+| **Silver** | 39,474 SPLD | Enhanced rewards |
+| **Gold** | 394,737 SPLD | Premium rewards & governance |
+| **Platinum** | 3,947,368 SPLD | Elite tier with maximum rewards |
 
 ### System Contracts
 Pre-deployed contracts for network governance:
@@ -203,14 +203,37 @@ npx hardhat run scripts/deploy.js --network splendor
 - **Finality**: Instant (single block confirmation)
 - **Uptime**: 99.9%+ network availability
 
-#### TPS Calculation
+#### TPS Calculation - Theoretical vs Reality
+
+**Network Configuration:**
+- **Genesis Gas Limit**: 20,000,000,000 (20B gas per block)
+- **Validator Gas Limit**: 20,000,000,000 (20B gas per block)
+- **Transaction Pool Capacity**: 300,000+ transactions (200k pending + 100k queued)
+- **Per-Account Limits**: 20,000 transactions per account (10k pending + 10k queued)
+
+**Theoretical Maximum (Math Only):**
 ```javascript
-Transactions per Block: 20,000,000,000 ÷ 21,000 = 952,380 txs
-Blocks per Second: 1 ÷ 1 = 1 block/sec
-Sequential TPS: 952,380 × 1 = 952,380 TPS
-Parallel TPS: 952,380 × 12 = 11,428,560 TPS (theoretical)
-Production TPS: ~500,000-800,000 TPS (realistic)
+Gas per Block: 20,000,000,000 (20B)
+Transaction Cost: 21,000 gas (simple transfer)
+Block Time: 1 second
+
+Theoretical Ceiling: 20,000,000,000 ÷ 21,000 ≈ 952,380 TPS
 ```
+
+**Real-World Performance:**
+The theoretical 952,380 TPS assumes infinite CPU, disk, and networking resources. Actual throughput is limited by hardware bottlenecks:
+
+- **8-core validator**: ~30,000-50,000 TPS
+- **16-core validator**: ~80,000-100,000 TPS  
+- **64-core validator**: ~250,000-400,000 TPS
+- **128-core validator cluster**: 500,000+ TPS (with optimized infrastructure)
+
+**Hardware Requirements for High TPS:**
+- **CPU**: 64-128 cores (AMD EPYC or Intel Xeon)
+- **RAM**: 256-512 GB
+- **Storage**: Ultra-fast NVMe SSDs (7+ GB/s write speed)
+- **Network**: 25-100 Gbps networking
+- **Infrastructure**: Datacenter-class nodes with optimized parallel processing
 
 #### Transaction Costs (SPLD = $0.38)
 ```javascript

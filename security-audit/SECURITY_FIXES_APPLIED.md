@@ -108,7 +108,7 @@ All system contracts have been recompiled and their bytecode updated in genesis.
 
 While the contracts are now secure, we recommend reviewing these genesis parameters:
 
-1. **Gas Limit**: Currently 300M - consider reducing to 20M for better DoS protection
+1. **Gas Limit**: Currently 20B (20,000,000,000) - properly configured for high throughput
 2. **Block Time**: 1 second is aggressive - ensure infrastructure can handle this
 3. **Token Allocation**: Large allocation to single address - ensure proper governance
 

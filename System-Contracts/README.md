@@ -15,22 +15,22 @@ The difficulty value of a block is 2 when the block is generated normally and 1 
 Splendor RPC implements a four-tier validator system based on staking amounts:
 
 ### Bronze Tier (Entry Level)
-- **Minimum Stake:** 3,947 SPLD (~$1,500)
+- **Minimum Stake:** 3,947 SPLD
 - **Target:** New validators and smaller participants
 - **Benefits:** Basic validator rewards and network participation
 
 ### Silver Tier (Mid Level)
-- **Minimum Stake:** 39,474 SPLD (~$15,000)
+- **Minimum Stake:** 39,474 SPLD
 - **Target:** Committed validators with higher investment
 - **Benefits:** Enhanced network influence and rewards
 
 ### Gold Tier (Premium Level)
-- **Minimum Stake:** 394,737 SPLD (~$150,000)
+- **Minimum Stake:** 394,737 SPLD
 - **Target:** Major validators and institutional participants
 - **Benefits:** Maximum network influence and premium rewards
 
 ### Platinum Tier (Elite Level)
-- **Minimum Stake:** 3,947,368 SPLD (~$1,500,000)
+- **Minimum Stake:** 3,947,368 SPLD
 - **Target:** Institutional validators and major stakeholders
 - **Benefits:** Elite tier with maximum rewards and governance influence
 

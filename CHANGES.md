@@ -45,7 +45,7 @@ This document outlines all changes made to the Splendor Blockchain codebase duri
 - **Consensus:** Congress PoSA with 1s block time (mainnet), 1s (testnet)
 - **Chain ID:** 2691 (mainnet), 256 (testnet)
 - **Fork Schedule:** Berlin/London enabled, custom RedCoast/Sophon forks
-- **Gas Limit:** ~300M (very high - recommend monitoring)
+- **Gas Limit:** 20B (20,000,000,000) - configured for high throughput
 
 ### System Contracts Analysis
 **Files Reviewed:**
@@ -77,7 +77,7 @@ This document outlines all changes made to the Splendor Blockchain codebase duri
 5. **Make treasury address governable** instead of hardcoded
 6. **Add configurable caps** for MAX_REWARD_VALIDATORS
 7. **Align genesis.json with compiled ChainConfig**
-8. **Review block gas limit** (currently very high at 300M)
+8. **Review block gas limit** (currently set to 20B for high throughput)
 
 ### Low Priority Enhancements
 9. **Add comprehensive unit tests**

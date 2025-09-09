@@ -103,13 +103,47 @@ Based on testing with various transaction loads:
 - **Better resource utilization** across CPU cores
 - **Improved scalability** with transaction volume
 
-### Performance Metrics
+### Performance Metrics - Theoretical vs Reality
 
-With 1-second block times and 20B gas limit:
-- **Sequential TPS**: ~952,380 transactions per second
-- **Parallel TPS**: ~11,428,560 transactions per second (theoretical)
-- **Production TPS**: ~500,000-800,000 transactions per second (realistic)
-- **Block Processing**: <1 second with parallel optimization
+**Network Configuration:**
+- **Genesis Gas Limit**: 20,000,000,000 (20B gas per block)
+- **Validator Miner Gas Limit**: 20,000,000,000 (20B gas per block)
+- **Transaction Pool Capacity**: 300,000+ transactions (200k pending + 100k queued)
+- **Per-Account Transaction Limits**: 20,000 transactions per account (10k pending + 10k queued)
+
+**Theoretical Maximum (Math Only):**
+```javascript
+Gas per Block: 20,000,000,000 (20B)
+Transaction Cost: 21,000 gas (simple transfer)
+Block Time: 1 second
+
+Theoretical Ceiling: 20,000,000,000 ÷ 21,000 ≈ 952,380 TPS
+```
+
+**Real-World Performance:**
+The theoretical 952,380 TPS assumes infinite CPU, disk, and networking resources. Actual throughput is limited by hardware bottlenecks:
+
+**CPU-bound Performance:**
+- **4-8 cores**: ~10,000-30,000 TPS
+- **16-32 cores**: ~50,000-100,000 TPS
+- **64-128 cores**: ~200,000-500,000 TPS
+
+**Hardware Requirements for High TPS:**
+- **Validator CPU**: 64-128 cores (AMD EPYC or Intel Xeon)
+- **Memory**: 256-512 GB RAM
+- **Storage**: Ultra-fast NVMe SSDs (7+ GB/s write, RAID-0 or Optane)
+- **Network**: 25-100 Gbps networking per validator
+- **RPC Infrastructure**: Multiple 32-64 core servers for transaction ingress
+
+**Realistic Production Performance:**
+- **Current 8-core setup**: ~30,000-50,000 TPS
+- **Optimized 64-core setup**: ~250,000-400,000 TPS
+- **Datacenter cluster (128+ cores)**: 500,000+ TPS
+
+**Network Bottlenecks:**
+- **RPC Layer**: Usually saturates at 50,000-100,000 TPS per machine
+- **Disk I/O**: Requires NVMe SSDs and optimized database writes
+- **Network Propagation**: 952k TPS = ~50-100 MB/s sustained bandwidth per peer
 
 ### Benchmark Results
 

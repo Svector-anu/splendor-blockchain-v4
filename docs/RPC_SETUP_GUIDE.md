@@ -105,6 +105,22 @@ Each RPC node runs with the following configuration:
 - `miner` - Mining information
 - `debug` - Debug utilities
 
+### Gas and Transaction Pool Configuration
+
+The RPC nodes are configured with high-performance settings to handle massive transaction volumes:
+
+#### Gas Limits
+- **Network Gas Limit**: 20,000,000,000 (20B gas per block)
+- **RPC Transaction Fee Cap**: 0 (`--rpc.txfeecap 0`)
+
+#### Transaction Pool Settings (High-Performance)
+- **Account Slots**: 10,000 pending transactions per account (`--txpool.accountslots=10000`)
+- **Global Slots**: 200,000 total pending transactions (`--txpool.globalslots=200000`)
+- **Account Queue**: 10,000 queued transactions per account (`--txpool.accountqueue=10000`)
+- **Global Queue**: 100,000 total queued transactions (`--txpool.globalqueue=100000`)
+
+**Total Capacity**: 300,000+ simultaneous transactions (200k pending + 100k queued)
+
 ### Sync Settings
 - **Sync Mode**: Full (complete blockchain history)
 - **GC Mode**: Archive (keeps all state)

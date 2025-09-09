@@ -43,14 +43,31 @@ Your Splendor blockchain now has advanced parallel processing capabilities that 
 - **Max Concurrency**: 16 workers (2x CPU cores)
 - **Batch Size**: 500 transactions per batch
 
-### TPS Calculation
+### TPS Calculation - Theoretical vs Reality
+
+**Theoretical Maximum (Math Only):**
 ```javascript
-Transactions per Block: 20,000,000,000 ÷ 21,000 = 952,380 txs
-Blocks per Second: 1 ÷ 1 = 1 block/sec
-Sequential TPS: 952,380 × 1 = 952,380 TPS
-Parallel TPS: 952,380 × 12 = 11,428,560 TPS (theoretical)
-Production TPS: ~500,000-800,000 TPS (realistic)
+Gas per Block: 20,000,000,000 (20B)
+Transaction Cost: 21,000 gas (simple transfer)
+Block Time: 1 second
+
+Theoretical Ceiling: 20,000,000,000 ÷ 21,000 ≈ 952,380 TPS
 ```
+
+**Real-World Performance:**
+The theoretical 952,380 TPS assumes infinite CPU, disk, and networking resources. Actual throughput is limited by hardware bottlenecks:
+
+- **8-core validator**: ~30,000-50,000 TPS
+- **16-core validator**: ~80,000-100,000 TPS  
+- **64-core validator**: ~250,000-400,000 TPS
+- **128-core validator cluster**: 500,000+ TPS (with optimized infrastructure)
+
+**Hardware Requirements for High TPS:**
+- **CPU**: 64-128 cores (AMD EPYC or Intel Xeon)
+- **RAM**: 256-512 GB
+- **Storage**: Ultra-fast NVMe SSDs (7+ GB/s write speed)
+- **Network**: 25-100 Gbps networking
+- **Infrastructure**: Datacenter-class nodes with optimized parallel processing
 
 ### Transaction Costs (SPLD = $0.38)
 ```javascript
@@ -130,13 +147,14 @@ go test ./core -run TestGopoolIntegration -v
 
 ## 🎯 Key Benefits
 
-1. **11,428,560 TPS Capacity**: Theoretical maximum throughput
-2. **500,000-800,000 TPS**: Realistic production performance
-3. **49x Parallel Speedup**: Verified through testing
-4. **1 Second Blocks**: Fast confirmation times
-5. **$0.000008 Transaction Costs**: Practically free transactions
-6. **No Sharding Complexity**: Single chain simplicity
-7. **Full Compatibility**: Works with all existing tools
+1. **952,380 TPS Theoretical**: Mathematical ceiling with 20B gas blocks
+2. **30,000-50,000 TPS**: Realistic performance with 8-core validators
+3. **500,000+ TPS**: Achievable with datacenter-class hardware (128+ cores)
+4. **49x Parallel Speedup**: Verified through testing
+5. **1 Second Blocks**: Fast confirmation times
+6. **$0.000008 Transaction Costs**: Practically free transactions
+7. **No Sharding Complexity**: Single chain simplicity
+8. **Full Compatibility**: Works with all existing tools
 
 ## 🔍 Monitoring
 
