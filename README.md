@@ -13,7 +13,7 @@ Splendor Blockchain V4 is a production-ready mainnet that combines the best of E
 
 ### Key Features
 
-- **⚡ Ultra High Performance**: 1 second block times with 952,380 TPS capacity
+- **⚡ Ultra High Performance**: 1 second block times with 10,000 TPS capacity
 - **� Advanced Parallel Processing**: 49x speedup with multi-core optimization
 - **�🔒 Enterprise Security**: Congress consensus with Byzantine fault tolerance
 - **💰 Low Fees**: Minimal transaction costs for all operations
@@ -99,7 +99,7 @@ Splendor uses an enhanced Proof of Authority consensus called "Congress" that pr
 - **Fast Finality**: Transactions confirmed in 1 second
 - **High Security**: Byzantine fault tolerance with validator rotation
 - **Energy Efficient**: No wasteful mining, minimal environmental impact
-- **Ultra-Scalable**: Supports 952,380+ transactions per second with 20B gas limit
+- **Ultra-Scalable**: Supports 10,000+ transactions per second with 20B gas limit
 
 ### Validator Tiers
 | Tier | Stake Required | Benefits |
