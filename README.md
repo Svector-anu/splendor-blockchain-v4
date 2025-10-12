@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="logo.png" alt="Splendor Blockchain Logo" width="200"/>
+</div>
+
 # Splendor Blockchain V4 - Mainnet
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
