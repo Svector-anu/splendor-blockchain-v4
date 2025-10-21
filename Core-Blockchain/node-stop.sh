@@ -123,7 +123,12 @@ stopValidator(){
 }
 
 finalize(){
-  pm2 stop all
+  # Stop pm2 processes (sync-helper) if pm2 is available; otherwise skip
+  if command -v pm2 >/dev/null 2>&1; then
+    pm2 stop all || true
+  else
+    log_wait "pm2 not found; skipping pm2 stop"
+  fi
   countNodes
   
   if [ "$isRPC" = true ]; then

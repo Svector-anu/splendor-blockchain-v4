@@ -47,7 +47,7 @@ Splendor RPC is a DPoS (Delegated Proof of Stake) blockchain with the following 
 - [x] Chain ID set to 2691
 - [x] Genesis file configured with 26B initial supply
 - [x] Minting address set to `0xF5BBDF432EcCCeF7eD8E96D643edB26D76390C84`
-- [x] Congress consensus parameters configured (1s block time, 50 block epochs)
+- [x] Congress consensus parameters configured (1s block time, 200 block epochs)
 
 ### 2. System Contracts
 - [x] Validators contract with tiered system implemented
@@ -165,7 +165,7 @@ Splendor RPC is a DPoS (Delegated Proof of Stake) blockchain with the following 
 
 ### Blockchain Parameters
 - **Block Time**: 1 second (faster blocks for improved performance)
-- **Epoch Length**: 50 blocks
+- **Epoch Length**: 200 blocks
 - **Max Validators**: 10,000
 - **Staking Lock Period**: 86,400 blocks
 - **Selective Rewards**: Only owner-approved validators receive extra rewards

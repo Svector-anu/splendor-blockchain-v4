@@ -195,15 +195,20 @@ func (psp *ParallelStateProcessor) ProcessParallel(block *types.Block, statedb *
 
 // separateTransactions separates system and regular transactions
 func (psp *ParallelStateProcessor) separateTransactions(txs []*types.Transaction, signer types.Signer, header *types.Header, isPoSA bool, posa consensus.PoSA) ([]*types.Transaction, []*types.Transaction, error) {
-	commonTxs := make([]*types.Transaction, 0, len(txs))
-	systemTxs := make([]*types.Transaction, 0)
-	
-	for _, tx := range txs {
-		if isPoSA {
-			sender, err := types.Sender(signer, tx)
-			if err != nil {
-				return nil, nil, err
-			}
+    commonTxs := make([]*types.Transaction, 0, len(txs))
+    systemTxs := make([]*types.Transaction, 0)
+    
+    for _, tx := range txs {
+        // Treat X402 typed txs as regular common transactions to be handled by the processor
+        if tx.Type() == types.X402TxType {
+            commonTxs = append(commonTxs, tx)
+            continue
+        }
+        if isPoSA {
+            sender, err := types.Sender(signer, tx)
+            if err != nil {
+                return nil, nil, err
+            }
 			
 			ok, err := posa.IsSysTransaction(sender, tx, header)
 			if err != nil {

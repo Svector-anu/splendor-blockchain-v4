@@ -31,7 +31,7 @@ This project aims to provide installation, running, and maintenance capabilities
 
 ## Validator Tiers
 
-Splendor RPC implements a four-tier validator system based on staking amounts:
+Splendor RPC implements a tiered validator system with three levels based on staking amounts:
 
 ### **Bronze Tier** - Entry Level
 - **Minimum Stake:** 3,947 SPLD
@@ -47,11 +47,6 @@ Splendor RPC implements a four-tier validator system based on staking amounts:
 - **Minimum Stake:** 394,737 SPLD
 - **Target Audience:** Major validators and institutional participants
 - **Benefits:** Maximum network influence and premium rewards
-
-### **Platinum Tier** - Elite Level
-- **Minimum Stake:** 3,947,368 SPLD
-- **Target Audience:** Enterprise validators and major institutional participants
-- **Benefits:** Elite tier with maximum rewards and governance influence
 
 **Note:** Validator tiers are automatically assigned and updated based on total staking amount (including delegated stakes). Higher tiers demonstrate greater commitment to the network.
 

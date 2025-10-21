@@ -1,7 +1,3 @@
-<div align="center">
-  <img src="logo.png" alt="Splendor Blockchain Logo" width="200"/>
-</div>
-
 # Splendor Blockchain V4 - Mainnet
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -17,7 +13,7 @@ Splendor Blockchain V4 is a production-ready mainnet that combines the best of E
 
 ### Key Features
 
-- **⚡ Ultra High Performance**: 1 second block times with 10,000 TPS capacity
+- **⚡ Ultra High Performance**: 1 second block times with 952,380 TPS capacity
 - **� Advanced Parallel Processing**: 49x speedup with multi-core optimization
 - **�🔒 Enterprise Security**: Congress consensus with Byzantine fault tolerance
 - **💰 Low Fees**: Minimal transaction costs for all operations
@@ -85,6 +81,70 @@ npm run verify
 - **[Smart Contract Development](docs/technical/SMART_CONTRACTS.md)** - Build and deploy contracts
 - **[Parallel Processing Guide](docs/technical/PARALLEL_PROCESSING_GUIDE.md)** - Advanced performance optimization
 
+### 💳 x402 Payments
+- What it is: Native, gasless micropayments built into consensus (no facilitator)
+  - Verify/settle through the node’s JSON‑RPC
+  - Supports SPLD (native) and any ERC‑20 (incl. optional EIP‑2612 permit)
+  - Strict signatures, time‑window checks, and on‑chain nonce replay protection
+- Quick RPC check:
+  - `curl -s -X POST -H 'Content-Type: application/json' --data '{"jsonrpc":"2.0","method":"x402_supported","params":[],"id":1}' https://mainnet-rpc.splendor.org/`
+- Developer guides:
+  - **Developer Integration (end‑to‑end):** `docs/x402/developer-integration.md`
+  - **Native x402 (technical):** `docs/x402/native-payments.md`
+  - **Payments & Payloads (reference):** `docs/x402/payment-guide.md`
+- Examples & tooling:
+  - **Express (RPC‑only):** `Core-Blockchain/examples/x402-rpc-gated-server.js`
+  - **Flask (RPC‑only):** `Core-Blockchain/examples/x402-rpc-gated-flask.py`
+  - **Middleware example:** `Core-Blockchain/examples/x402-middleware-server.js`
+  - **CLI tutorial:** `docs/x402/examples/cli-tutorial.md`
+  - **Postman collection:** `docs/x402/examples/postman/x402_rpc.postman_collection.json`
+  - **OpenAPI YAML:** `docs/x402/examples/openapi/x402-rpc.yaml`
+
+#### x402 At A Glance
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant U as User (Client)
+    participant A as Your API Server
+    participant R as Splendor RPC Node
+    participant C as Consensus (Chain)
+
+    U->>A: GET /api/premium (no payment)
+    A-->>U: 402 Payment Required + requirements
+    U->>A: GET /api/premium (X-Payment header)
+    A->>R: x402_verify(requirements, payload)
+    R-->>A: { isValid: true, payerAddress }
+    A->>R: x402_settle(requirements, payload)
+    R->>C: Include X402 typed tx in block
+    C-->>R: Settle (SPLD move or ERC‑20 transferFrom)
+    R-->>A: { success: true, txHash }
+    A-->>U: 200 OK + content (X-Payment-Response)
+```
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant A as API
+    participant R as RPC
+    participant T as ERC‑20 Token
+
+    Note over A,R: ERC‑20 with optional permit
+    A->>R: x402_verify(requirements, payload)
+    alt payload includes permit
+      R-->>A: Simulate permit OK → allowance not required
+    else no permit
+      R-->>A: Require allowance(from → payTo) ≥ amount
+    end
+    A->>R: x402_settle(requirements, payload)
+    alt permit present
+      R->>T: permit(owner, payTo, value, deadline, v, r, s)
+    end
+    R->>T: transferFrom(from, payTo, amount)
+    T-->>R: Transfer (bool or empty)
+    R-->>A: { success: true, txHash }
+```
+
 ### 🏛️ Governance & Community
 - **[Roadmap](docs/governance/ROADMAP.md)** - Development roadmap and future plans
 - **[Contributing Guide](docs/governance/CONTRIBUTING.md)** - How to contribute to the project
@@ -103,7 +163,7 @@ Splendor uses an enhanced Proof of Authority consensus called "Congress" that pr
 - **Fast Finality**: Transactions confirmed in 1 second
 - **High Security**: Byzantine fault tolerance with validator rotation
 - **Energy Efficient**: No wasteful mining, minimal environmental impact
-- **Ultra-Scalable**: Supports 10,000+ transactions per second with 20B gas limit
+- **Ultra-Scalable**: Supports 952,380+ transactions per second with 20B gas limit
 
 ### Validator Tiers
 | Tier | Stake Required | Benefits |

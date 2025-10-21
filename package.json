@@ -2,6 +2,7 @@
   "name": "splendor-blockchain-v4",
   "version": "4.0.0",
   "description": "Splendor Blockchain V4 - A high-performance blockchain with Congress consensus mechanism",
+  "type": "module",
   "main": "mainnet-verification.js",
   "scripts": {
     "start": "node mainnet-verification.js",
@@ -43,6 +44,7 @@
     "go": ">=1.15.0"
   },
   "dependencies": {
+    "axios": "^1.12.2",
     "ethers": "^6.15.0"
   },
   "os": [

@@ -99,6 +99,10 @@ type Ethereum struct {
 
 	p2pServer *p2p.Server
 
+	// X402 transaction broadcasting and sync management
+	x402BroadcastManager *X402BroadcastManager
+	x402SyncManager      *X402SyncManager
+
 	lock sync.RWMutex // Protects the variadic fields (e.g. gas price and etherbase)
 }
 
@@ -290,6 +294,13 @@ func New(stack *node.Node, config *ethconfig.Config) (*Ethereum, error) {
 				"age", common.PrettyAge(t))
 		}
 	}
+
+	// Initialize X402 broadcast and sync managers AFTER all other components are ready
+	// This ensures the handler and other dependencies are fully initialized
+	eth.x402BroadcastManager = NewX402BroadcastManager(eth)
+	eth.x402SyncManager = NewX402SyncManager(eth)
+	log.Info("X402: Initialized broadcast and sync managers")
+
 	return eth, nil
 }
 
@@ -402,6 +413,11 @@ func (s *Ethereum) APIs() []rpc.API {
 			Namespace: "net",
 			Version:   "1.0",
 			Service:   s.netRPCService,
+			Public:    true,
+		}, {
+			Namespace: "x402",
+			Version:   "1.0",
+			Service:   NewX402API(s),
 			Public:    true,
 		},
 	}...)
@@ -583,6 +599,16 @@ func (s *Ethereum) Synced() bool                       { return atomic.LoadUint3
 func (s *Ethereum) ArchiveMode() bool                  { return s.config.NoPruning }
 func (s *Ethereum) BloomIndexer() *core.ChainIndexer   { return s.bloomIndexer }
 
+// GetX402BroadcastManager returns the x402 broadcast manager
+func (s *Ethereum) GetX402BroadcastManager() *X402BroadcastManager {
+	return s.x402BroadcastManager
+}
+
+// GetX402SyncManager returns the x402 sync manager
+func (s *Ethereum) GetX402SyncManager() *X402SyncManager {
+	return s.x402SyncManager
+}
+
 // Protocols returns all the currently configured
 // network protocols to start.
 func (s *Ethereum) Protocols() []p2p.Protocol {
@@ -621,6 +647,12 @@ func (s *Ethereum) Stop() error {
 	s.ethDialCandidates.Close()
 	s.snapDialCandidates.Close()
 	s.handler.Stop()
+
+	// Stop X402 managers
+	if s.x402BroadcastManager != nil {
+		s.x402BroadcastManager.Stop()
+		log.Info("X402: Stopped broadcast manager")
+	}
 
 	// Then stop everything else.
 	s.bloomIndexer.Close()

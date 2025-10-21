@@ -1,0 +1,96 @@
+openapi: 3.0.3
+info:
+  title: Splendor JSON-RPC (x402)
+  version: '1.0'
+servers:
+  - url: https://mainnet-rpc.splendor.org/
+paths:
+  /:
+    post:
+      summary: JSON-RPC endpoint supporting x402 methods
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                jsonrpc: { type: string, example: '2.0' }
+                method: { type: string, example: 'x402_supported' }
+                params: { type: array, items: { } }
+                id: { oneOf: [{ type: integer }, { type: string }] }
+      responses:
+        '200':
+          description: JSON-RPC response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc: { type: string }
+                  result: { }
+                  error: { }
+                  id: { }
+      x-examples:
+        x402_supported:
+          request:
+            jsonrpc: '2.0'
+            method: x402_supported
+            params: []
+            id: 1
+        x402_verify:
+          request:
+            jsonrpc: '2.0'
+            method: x402_verify
+            params:
+              - { $ref: '#/components/schemas/PaymentRequirements' }
+              - { $ref: '#/components/schemas/PaymentPayload' }
+            id: 2
+        x402_settle:
+          request:
+            jsonrpc: '2.0'
+            method: x402_settle
+            params:
+              - { $ref: '#/components/schemas/PaymentRequirements' }
+              - { $ref: '#/components/schemas/PaymentPayload' }
+            id: 3
+components:
+  schemas:
+    PaymentRequirements:
+      type: object
+      properties:
+        scheme: { type: string, example: exact }
+        network: { type: string, example: splendor }
+        maxAmountRequired: { type: string, example: '0x9184e72a000' }
+        resource: { type: string, example: /api/premium }
+        description: { type: string }
+        mimeType: { type: string, example: application/json }
+        payTo: { type: string, example: '0xYourReceiver' }
+        maxTimeoutSeconds: { type: integer, example: 300 }
+        asset: { type: string, example: '0x0000000000000000000000000000000000000000' }
+    PaymentPayload:
+      type: object
+      properties:
+        x402Version: { type: integer, example: 1 }
+        scheme: { type: string, example: exact }
+        network: { type: string, example: splendor }
+        payload:
+          type: object
+          properties:
+            from: { type: string }
+            to: { type: string }
+            value: { type: string, example: '0x9184e72a000' }
+            validAfter: { type: integer }
+            validBefore: { type: integer }
+            nonce: { type: string }
+            asset: { type: string }
+            signature: { type: string }
+            permit:
+              type: object
+              properties:
+                value: { type: string }
+                deadline: { type: string }
+                v: { type: integer }
+                r: { type: string }
+                s: { type: string }
+

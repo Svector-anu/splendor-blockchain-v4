@@ -27,7 +27,9 @@ System-Contracts/artifacts/
 System-Contracts/cache/
 System-Contracts/typechain-types/
 
-# Environment files
+# Environment files - NEVER commit these!
+.env
+.env.*
 .env.local
 .env.development.local
 .env.test.local
@@ -140,3 +142,6 @@ server-configs/
 monitoring/
 enode-api-server.js
 splendor-rpc.org
+
+# X402 Protocol test deployables (development/testing only)
+x402-Protocol-Deployable/
