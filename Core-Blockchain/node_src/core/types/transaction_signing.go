@@ -183,10 +183,6 @@ func NewLondonSigner(chainId *big.Int) Signer {
 }
 
 func (s londonSigner) Sender(tx *Transaction) (common.Address, error) {
-	if tx.Type() == X402TxType {
-		// X402 transactions use a pseudo-sender address
-		return common.HexToAddress("0x0000000000000000000000000000000000000402"), nil
-	}
 	if tx.Type() != DynamicFeeTxType {
 		return s.eip2930Signer.Sender(tx)
 	}
@@ -206,12 +202,6 @@ func (s londonSigner) Equal(s2 Signer) bool {
 }
 
 func (s londonSigner) SignatureValues(tx *Transaction, sig []byte) (R, S, V *big.Int, err error) {
-	if tx.Type() == X402TxType {
-		// X402 transactions use simple signature values
-		R, S, _ = decodeSignature(sig)
-		V = big.NewInt(int64(sig[64]))
-		return R, S, V, nil
-	}
 	txdata, ok := tx.inner.(*DynamicFeeTx)
 	if !ok {
 		return s.eip2930Signer.SignatureValues(tx, sig)
@@ -229,20 +219,6 @@ func (s londonSigner) SignatureValues(tx *Transaction, sig []byte) (R, S, V *big
 // Hash returns the hash to be signed by the sender.
 // It does not uniquely identify the transaction.
 func (s londonSigner) Hash(tx *Transaction) common.Hash {
-	if tx.Type() == X402TxType {
-		// X402 transactions use a simple hash based on their data
-		return prefixedRlpHash(
-			tx.Type(),
-			[]interface{}{
-				s.chainId,
-				tx.Nonce(),
-				tx.GasPrice(),
-				tx.Gas(),
-				tx.To(),
-				tx.Value(),
-				tx.Data(),
-			})
-	}
 	if tx.Type() != DynamicFeeTxType {
 		return s.eip2930Signer.Hash(tx)
 	}

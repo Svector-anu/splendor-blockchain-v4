@@ -266,7 +266,7 @@ function getProposal(uint256 proposalId) external view returns (
 )
 ```
 
-### Slashing Contract (0x000000000000000000000000000000000000F003)
+### Slashing Contract (0x000000000000000000000000000000000000F007)
 
 Implements slashing logic for validator misbehavior.
 
@@ -288,9 +288,11 @@ function getSlashingParams() external view returns (
 )
 ```
 
-### Params Contract (0x000000000000000000000000000000000000F004)
+### Params Contract
 
 Stores and manages network parameters.
+
+**Note:** The Params contract is used internally by system contracts and does not have a separate deployed address for external interaction.
 
 #### Key Methods
 

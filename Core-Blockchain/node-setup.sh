@@ -386,85 +386,6 @@ progress_bar() {
 }
 
 
-setup_x402(){
-  log_wait "Setting up x402 native payments system" && progress_bar
-  
-  # Add x402 configuration to .env if not already present
-  if ! grep -q "X402_ENABLED" .env 2>/dev/null; then
-    log_wait "Adding x402 configuration to .env"
-    cat >> .env << 'EOF'
-
-# Native x402 Payments Protocol Configuration
-X402_ENABLED=true
-X402_NETWORK=splendor
-X402_CHAIN_ID=2691
-X402_DEFAULT_PRICE=0.001
-X402_MIN_PAYMENT=0.001
-X402_SETTLEMENT_TIMEOUT=300
-X402_ENABLE_LOGGING=true
-
-# x402 Performance Settings
-X402_BATCH_SIZE=1000
-X402_CACHE_SIZE=10000
-X402_WORKER_THREADS=4
-X402_ENABLE_COMPRESSION=true
-
-# x402 Security Settings
-X402_SIGNATURE_VALIDATION=strict
-X402_NONCE_VALIDATION=true
-X402_TIMESTAMP_TOLERANCE=300
-X402_RATE_LIMITING=true
-X402_MAX_REQUESTS_PER_MINUTE=1000
-EOF
-    log_success "x402 configuration added to .env"
-  else
-    log_success "x402 configuration already present in .env"
-  fi
-
-  # Install x402 middleware dependencies
-  if [ -d "x402-middleware" ]; then
-    log_wait "Installing x402 middleware dependencies"
-    cd x402-middleware
-    if npm install > /dev/null 2>&1; then
-      log_success "x402 middleware dependencies installed"
-    else
-      log_error "Failed to install x402 middleware dependencies"
-    fi
-    cd ..
-  fi
-
-  # Create x402 test configuration
-  if [ ! -f "x402-test-config.json" ]; then
-    log_wait "Creating x402 test configuration"
-    cat > x402-test-config.json << 'EOF'
-{
-  "network": "splendor",
-  "chainId": 2691,
-  "rpcUrl": "http://localhost:80",
-  "facilitatorUrl": "http://localhost:80",
-  "testEndpoints": {
-    "verify": "/x402_verify",
-    "settle": "/x402_settle", 
-    "supported": "/x402_supported"
-  },
-  "testPayments": {
-    "micro": "0.001",
-    "small": "0.01",
-    "medium": "0.1",
-    "large": "1.0"
-  },
-  "testAddresses": {
-    "payer": "0x6BED5A6606fF44f7d986caA160F14771f7f14f69",
-    "recipient": "0xAbC3c6f5C6600510fF81db7D7F96F65dB2Fd1417"
-  }
-}
-EOF
-    log_success "x402 test configuration created"
-  fi
-
-  log_success "x402 native payments system configured"
-}
-
 finalize(){
   displayWelcome
   createRpc
@@ -508,8 +429,6 @@ finalize(){
   yarn
   cd $nodePath
 
-  # Setup x402 native payments system
-  setup_x402
 
   displayStatus
 }

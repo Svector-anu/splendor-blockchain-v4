@@ -18,29 +18,25 @@
 package miner
 
 import (
-    "bytes"
-    "errors"
-    "math/big"
-    "strconv"
-    "sync"
-    "sync/atomic"
-    "time"
+	"bytes"
+	"errors"
+	"math/big"
+	"strconv"
+	"sync"
+	"sync/atomic"
+	"time"
 
-    mapset "github.com/deckarep/golang-set"
-    "github.com/ethereum/go-ethereum/common"
-    "github.com/ethereum/go-ethereum/accounts"
-    "github.com/ethereum/go-ethereum/crypto"
-    "github.com/ethereum/go-ethereum/consensus"
-    "github.com/ethereum/go-ethereum/consensus/misc"
-    "github.com/ethereum/go-ethereum/core"
-    "github.com/ethereum/go-ethereum/core/state"
-    "github.com/ethereum/go-ethereum/core/types"
-    "github.com/ethereum/go-ethereum/rlp"
-    "github.com/ethereum/go-ethereum/core/vm"
-    "github.com/ethereum/go-ethereum/event"
-    "github.com/ethereum/go-ethereum/log"
-    "github.com/ethereum/go-ethereum/params"
-    "github.com/ethereum/go-ethereum/trie"
+	mapset "github.com/deckarep/golang-set"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/consensus"
+	"github.com/ethereum/go-ethereum/consensus/misc"
+	"github.com/ethereum/go-ethereum/core"
+	"github.com/ethereum/go-ethereum/core/state"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/event"
+	"github.com/ethereum/go-ethereum/log"
+	"github.com/ethereum/go-ethereum/params"
+	"github.com/ethereum/go-ethereum/trie"
 )
 
 const (
@@ -532,16 +528,11 @@ func (w *worker) mainLoop() {
 				coinbase := w.coinbase
 				w.mu.RUnlock()
 
-            txs := make(map[common.Address]types.Transactions)
-            for _, tx := range ev.Txs {
-                var acc common.Address
-                if tx.Type() == types.X402TxType {
-                    acc = common.HexToAddress("0x0000000000000000000000000000000000000402")
-                } else {
-                    acc, _ = types.Sender(w.current.signer, tx)
-                }
-                txs[acc] = append(txs[acc], tx)
-            }
+				txs := make(map[common.Address]types.Transactions)
+				for _, tx := range ev.Txs {
+					acc, _ := types.Sender(w.current.signer, tx)
+					txs[acc] = append(txs[acc], tx)
+				}
 				txset := types.NewTransactionsByPriceAndNonce(w.current.signer, txs, w.current.header.BaseFee)
 				tcount := w.current.tcount
 				w.commitTransactions(txset, coinbase, nil)
@@ -850,12 +841,7 @@ func (w *worker) commitTransactions(txs *types.TransactionsByPriceAndNonce, coin
 		// during transaction acceptance is the transaction pool.
 		//
 		// We use the eip155 signer regardless of the current hf.
-		var from common.Address
-		if tx.Type() == types.X402TxType {
-			from = common.HexToAddress("0x0000000000000000000000000000000000000402")
-		} else {
-			from, _ = types.Sender(w.current.signer, tx)
-		}
+		from, _ := types.Sender(w.current.signer, tx)
 		// Check whether the tx is replay protected. If we're not in the EIP155 hf
 		// phase, start ignoring the sender until we do.
 		if tx.Protected() && !w.chainConfig.IsEIP155(w.current.header.Number) {
@@ -873,19 +859,10 @@ func (w *worker) commitTransactions(txs *types.TransactionsByPriceAndNonce, coin
 				continue
 			}
 		}
-        // Start executing the transaction
-        w.current.state.Prepare(tx.Hash(), w.current.tcount)
+		// Start executing the transaction
+		w.current.state.Prepare(tx.Hash(), w.current.tcount)
 
-        var (
-            logs []*types.Log
-            err  error
-        )
-        if tx.Type() == types.X402TxType {
-            // Handle native x402 system envelope in miner to keep state/receipts consistent
-            logs, err = w.commitX402Transaction(tx)
-        } else {
-            logs, err = w.commitTransaction(tx, coinbase)
-        }
+		logs, err := w.commitTransaction(tx, coinbase)
 		switch {
 		case errors.Is(err, core.ErrGasLimitReached):
 			// Pop the current out-of-gas transaction without shifting in the next from the account
@@ -942,154 +919,6 @@ func (w *worker) commitTransactions(txs *types.TransactionsByPriceAndNonce, coin
 		w.resubmitAdjustCh <- &intervalAdjust{inc: false}
 	}
 	return false
-}
-
-// commitX402Transaction applies an x402 typed transaction to the pending state and appends a receipt.
-func (w *worker) commitX402Transaction(tx *types.Transaction) ([]*types.Log, error) {
-    // Decode payload
-    type x402Permit struct {
-        Value    *big.Int
-        Deadline *big.Int
-        V        uint8
-        R        []byte
-        S        []byte
-    }
-    type x402Payload struct {
-        From        common.Address
-        To          common.Address
-        Value       *big.Int
-        ValidAfter  uint64
-        ValidBefore uint64
-        Nonce       common.Hash
-        Asset       common.Address
-        Signature   []byte
-        Permit      *x402Permit
-    }
-    var payload x402Payload
-    if err := rlp.DecodeBytes(tx.Data(), &payload); err != nil {
-        return nil, err
-    }
-    log.Info("X402(miner): envelope received", "from", payload.From, "to", payload.To, "asset", payload.Asset, "value", payload.Value, "nonce", payload.Nonce)
-    header := w.current.header
-    // Basic validity window check
-    ts := header.Time
-    if ts < payload.ValidAfter || ts > payload.ValidBefore {
-        // Mark failed receipt and continue
-        var root []byte
-        if w.chainConfig.IsByzantium(header.Number) {
-            w.current.state.Finalise(true)
-        } else {
-            root = w.current.state.IntermediateRoot(w.chainConfig.IsEIP158(header.Number)).Bytes()
-        }
-        receipt := &types.Receipt{Type: types.X402TxType, PostState: root, CumulativeGasUsed: w.current.header.GasUsed}
-        receipt.Status = types.ReceiptStatusFailed
-        receipt.TxHash = tx.Hash()
-        receipt.GasUsed = 0
-        receipt.Logs = w.current.state.GetLogs(tx.Hash(), common.Hash{})
-        w.current.txs = append(w.current.txs, tx)
-        w.current.receipts = append(w.current.receipts, receipt)
-        log.Warn("X402(miner): envelope outside validity window", "from", payload.From, "to", payload.To, "validAfter", payload.ValidAfter, "validBefore", payload.ValidBefore, "ts", ts)
-        return nil, nil
-    }
-    // Strict signature check matching consensus message format
-    valHex := "0x" + payload.Value.Text(16)
-    chainID := w.chainConfig.ChainID.Uint64()
-    msg := "x402-payment:" + payload.From.Hex() + ":" + payload.To.Hex() + ":" + valHex + ":" + strconv.FormatUint(payload.ValidAfter, 10) + ":" + strconv.FormatUint(payload.ValidBefore, 10) + ":" + payload.Nonce.Hex() + ":" + payload.Asset.Hex() + ":" + strconv.FormatUint(chainID, 10)
-    sig := append([]byte(nil), payload.Signature...)
-    sigOK := false
-    if len(sig) == 65 {
-        if sig[64] >= 27 { sig[64] -= 27 }
-        h := accounts.TextHash([]byte(msg))
-        if pub, err := crypto.SigToPub(h, sig); err == nil {
-            addr := crypto.PubkeyToAddress(*pub)
-            sigOK = (addr == payload.From)
-        }
-    }
-    if !sigOK {
-        log.Warn("X402(miner): signature verification failed", "from", payload.From, "to", payload.To)
-    }
-    success := false
-    if sigOK {
-        if payload.Asset == (common.Address{}) {
-            // Native balance transfer
-            if w.current.state.GetBalance(payload.From).Cmp(payload.Value) >= 0 {
-                w.current.state.SubBalance(payload.From, payload.Value)
-                w.current.state.AddBalance(payload.To, payload.Value)
-                success = true
-                log.Info("X402(miner): native transfer applied", "from", payload.From, "to", payload.To, "amount", payload.Value)
-            }
-        } else {
-            // ERC-20: optional permit then transferFrom
-            // Build EVM
-            blockCtx := core.NewEVMBlockContext(header, w.chain, nil)
-            evm := vm.NewEVM(blockCtx, vm.TxContext{}, w.current.state, w.chainConfig, *w.chain.GetVMConfig())
-            if payload.Permit != nil {
-                sel := crypto.Keccak256([]byte("permit(address,address,uint256,uint256,uint8,bytes32,bytes32)"))[:4]
-                var d []byte
-                d = append(d, sel...)
-                d = append(d, common.LeftPadBytes(payload.From.Bytes(), 32)...)
-                d = append(d, common.LeftPadBytes(payload.To.Bytes(), 32)...)
-                val := payload.Permit.Value; if val == nil { val = new(big.Int) }
-                dl := payload.Permit.Deadline; if dl == nil { dl = new(big.Int).SetUint64(^uint64(0)) }
-                d = append(d, common.LeftPadBytes(val.Bytes(), 32)...)
-                d = append(d, common.LeftPadBytes(dl.Bytes(), 32)...)
-                d = append(d, common.LeftPadBytes([]byte{byte(payload.Permit.V)}, 32)...)
-                r := payload.Permit.R; if len(r) != 32 { r = common.LeftPadBytes(r, 32) }
-                s := payload.Permit.S; if len(s) != 32 { s = common.LeftPadBytes(s, 32) }
-                d = append(d, r...)
-                d = append(d, s...)
-                old := evm.TxContext
-                evm.TxContext = vm.TxContext{Origin: payload.To, GasPrice: new(big.Int)}
-                _, _, perr := evm.Call(vm.AccountRef(payload.To), payload.Asset, d, header.GasLimit, new(big.Int))
-                evm.TxContext = old
-                if perr != nil {
-                    log.Warn("X402(miner): permit call failed, will rely on allowance", "err", perr)
-                } else {
-                    log.Info("X402(miner): permit call succeeded", "owner", payload.From, "spender", payload.To)
-                }
-            }
-            methodID := crypto.Keccak256([]byte("transferFrom(address,address,uint256)"))[:4]
-            var data []byte
-            data = append(data, methodID...)
-            data = append(data, common.LeftPadBytes(payload.From.Bytes(), 32)...)
-            data = append(data, common.LeftPadBytes(payload.To.Bytes(), 32)...)
-            data = append(data, common.LeftPadBytes(payload.Value.Bytes(), 32)...)
-            oldCtx := evm.TxContext
-            evm.TxContext = vm.TxContext{Origin: payload.To, GasPrice: new(big.Int)}
-            ret, _, vmerr := evm.Call(vm.AccountRef(payload.To), payload.Asset, data, header.GasLimit, new(big.Int))
-            evm.TxContext = oldCtx
-            if vmerr == nil {
-                if len(ret) == 0 { success = true } else if len(ret) >= 32 { success = new(big.Int).SetBytes(ret).Sign() != 0 }
-                log.Info("X402(miner): ERC20 transferFrom executed", "success", success, "from", payload.From, "to", payload.To, "amount", payload.Value, "asset", payload.Asset)
-            }
-            if vmerr != nil {
-                log.Warn("X402(miner): ERC20 transferFrom failed", "err", vmerr, "asset", payload.Asset)
-            }
-        }
-    }
-    // Mark nonce used in registry on success
-    if success {
-        x402Registry := common.HexToAddress("0x0000000000000000000000000000000000000403")
-        key := crypto.Keccak256Hash(append(payload.From.Bytes(), payload.Nonce.Bytes()...))
-        w.current.state.SetState(x402Registry, key, common.BytesToHash([]byte{1}))
-        log.Info("X402(miner): settlement success", "from", payload.From, "to", payload.To, "asset", payload.Asset, "value", payload.Value)
-    } else {
-        log.Warn("X402(miner): settlement failed", "from", payload.From, "to", payload.To, "asset", payload.Asset, "value", payload.Value)
-    }
-    var root []byte
-    if w.chainConfig.IsByzantium(header.Number) {
-        w.current.state.Finalise(true)
-    } else {
-        root = w.current.state.IntermediateRoot(w.chainConfig.IsEIP158(header.Number)).Bytes()
-    }
-    receipt := &types.Receipt{Type: types.X402TxType, PostState: root, CumulativeGasUsed: w.current.header.GasUsed}
-    if success { receipt.Status = types.ReceiptStatusSuccessful } else { receipt.Status = types.ReceiptStatusFailed }
-    receipt.TxHash = tx.Hash()
-    receipt.GasUsed = 0
-    receipt.Logs = w.current.state.GetLogs(tx.Hash(), common.Hash{})
-    w.current.txs = append(w.current.txs, tx)
-    w.current.receipts = append(w.current.receipts, receipt)
-    return receipt.Logs, nil
 }
 
 // commitNewWork generates several new sealing tasks based on the parent block.

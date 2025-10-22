@@ -191,8 +191,8 @@ clone_repository() {
   
   cd /root/
   
-  log_wait "Cloning https://github.com/therealdev101/splendor-blockchain-v4.git"
-  if git clone https://github.com/therealdev101/splendor-blockchain-v4.git; then
+  log_wait "Cloning https://github.com/Splendor-Protocol/splendor-blockchain-v4.git"
+  if git clone https://github.com/Splendor-Protocol/splendor-blockchain-v4.git; then
     log_success "Repository cloned successfully"
   else
     log_error "Failed to clone repository"

@@ -176,25 +176,21 @@ func (tx *Transaction) UnmarshalBinary(b []byte) error {
 
 // decodeTyped decodes a typed transaction from the canonical format.
 func (tx *Transaction) decodeTyped(b []byte) (TxData, error) {
-    if len(b) == 0 {
-        return nil, errEmptyTypedTx
-    }
-    switch b[0] {
-    case AccessListTxType:
-        var inner AccessListTx
-        err := rlp.DecodeBytes(b[1:], &inner)
-        return &inner, err
-    case DynamicFeeTxType:
-        var inner DynamicFeeTx
-        err := rlp.DecodeBytes(b[1:], &inner)
-        return &inner, err
-    case X402TxType:
-        var inner X402Tx
-        err := rlp.DecodeBytes(b[1:], &inner)
-        return &inner, err
-    default:
-        return nil, ErrTxTypeNotSupported
-    }
+	if len(b) == 0 {
+		return nil, errEmptyTypedTx
+	}
+	switch b[0] {
+	case AccessListTxType:
+		var inner AccessListTx
+		err := rlp.DecodeBytes(b[1:], &inner)
+		return &inner, err
+	case DynamicFeeTxType:
+		var inner DynamicFeeTx
+		err := rlp.DecodeBytes(b[1:], &inner)
+		return &inner, err
+	default:
+		return nil, ErrTxTypeNotSupported
+	}
 }
 
 // setDecoded sets the inner transaction and size after decoding.
@@ -461,18 +457,14 @@ type TxWithMinerFee struct {
 // miner gasTipCap if a base fee is provided.
 // Returns error in case of a negative effective miner gasTipCap.
 func NewTxWithMinerFee(tx *Transaction, baseFee *big.Int) (*TxWithMinerFee, error) {
-    // For native x402 envelopes (gasless system tx), treat miner fee as zero and do not error
-    if tx.Type() == X402TxType {
-        return &TxWithMinerFee{tx: tx, minerFee: new(big.Int)}, nil
-    }
-    minerFee, err := tx.EffectiveGasTip(baseFee)
-    if err != nil {
-        return nil, err
-    }
-    return &TxWithMinerFee{
-        tx:       tx,
-        minerFee: minerFee,
-    }, nil
+	minerFee, err := tx.EffectiveGasTip(baseFee)
+	if err != nil {
+		return nil, err
+	}
+	return &TxWithMinerFee{
+		tx:       tx,
+		minerFee: minerFee,
+	}, nil
 }
 
 // TxByPriceAndTime implements both the sort and the heap interface, making it useful
@@ -519,27 +511,20 @@ type TransactionsByPriceAndNonce struct {
 // Note, the input map is reowned so the caller should not interact any more with
 // if after providing it to the constructor.
 func NewTransactionsByPriceAndNonce(signer Signer, txs map[common.Address]Transactions, baseFee *big.Int) *TransactionsByPriceAndNonce {
-    // Initialize a price and received time based heap with the head transactions
-    heads := make(TxByPriceAndTime, 0, len(txs))
-    for from, accTxs := range txs {
-        // For native x402 typed envelopes, bypass sender derivation and fee check
-        if accTxs[0].Type() == X402TxType {
-            wrapped, _ := NewTxWithMinerFee(accTxs[0], baseFee)
-            heads = append(heads, wrapped)
-            txs[from] = accTxs[1:]
-            continue
-        }
-        acc, _ := Sender(signer, accTxs[0])
-        wrapped, err := NewTxWithMinerFee(accTxs[0], baseFee)
-        // Remove transaction if sender doesn't match from, or if wrapping fails.
-        if acc != from || err != nil {
-            delete(txs, from)
-            continue
-        }
-        heads = append(heads, wrapped)
-        txs[from] = accTxs[1:]
-    }
-    heap.Init(&heads)
+	// Initialize a price and received time based heap with the head transactions
+	heads := make(TxByPriceAndTime, 0, len(txs))
+	for from, accTxs := range txs {
+		acc, _ := Sender(signer, accTxs[0])
+		wrapped, err := NewTxWithMinerFee(accTxs[0], baseFee)
+		// Remove transaction if sender doesn't match from, or if wrapping fails.
+		if acc != from || err != nil {
+			delete(txs, from)
+			continue
+		}
+		heads = append(heads, wrapped)
+		txs[from] = accTxs[1:]
+	}
+	heap.Init(&heads)
 
 	// Assemble and return the transaction set
 	return &TransactionsByPriceAndNonce{

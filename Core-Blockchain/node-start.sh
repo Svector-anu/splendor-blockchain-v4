@@ -77,7 +77,7 @@ startRpc(){
         :
     else
         tmux new-session -d -s node$i
-        tmux send-keys -t node$i " ./node_src/build/bin/geth --datadir ./chaindata/node$i --networkid $CHAINID --bootnodes $BOOTNODE --port 30303 --ws --ws.addr $IP --ws.origins '*' --ws.port 8545 --http --http.port 80 --rpc.txfeecap 0  --http.corsdomain '*' --nat 'any' --http.api db,eth,net,web3,personal,txpool,miner,debug,x402 --http.addr $IP --vmdebug --pprof --pprof.port 6060 --pprof.addr $IP --syncmode=full --gcmode=archive --cache 8192 --ipcpath './chaindata/node$i/geth.ipc' --txpool.accountslots=64 --txpool.globalslots=8192 --txpool.accountqueue=128 --txpool.globalqueue=4096 --txpool.lifetime=1h --txpool.pricelimit=1000000000 --txpool.pricebump=10 console" Enter
+        tmux send-keys -t node$i " ./node_src/build/bin/geth --datadir ./chaindata/node$i --networkid $CHAINID --bootnodes $BOOTNODE --port 30303 --ws --ws.addr $IP --ws.origins '*' --ws.port 8545 --http --http.port 80 --rpc.txfeecap 0  --http.corsdomain '*' --nat 'any' --http.api db,eth,net,web3,personal,txpool,miner,debug --http.addr $IP --vmdebug --pprof --pprof.port 6060 --pprof.addr $IP --syncmode=full --gcmode=archive --cache 8192 --ipcpath './chaindata/node$i/geth.ipc' --txpool.accountslots=10000 --txpool.globalslots=200000 --txpool.accountqueue=10000 --txpool.globalqueue=100000 --txpool.lifetime=1h console" Enter
        
     fi
 
@@ -94,24 +94,7 @@ startValidator(){
         :
     else
         tmux new-session -d -s node$i
-        tmux send-keys -t node$i "./node_src/build/bin/geth \
-          --datadir ./chaindata/node$i \
-          --networkid $CHAINID \
-          --bootnodes $BOOTNODE \
-          --mine \
-          --port 30303 \
-          --nat extip:$IP \
-          --http --http.addr 127.0.0.1 --http.port 8545 --http.corsdomain '*' \
-          --http.api db,eth,net,web3,personal,txpool,miner,debug,x402,admin \
-          --ws --ws.addr 127.0.0.1 --ws.port 8546 --ws.origins '*' \
-          --gpo.percentile 0 --gpo.maxprice 100 --gpo.ignoreprice 0 \
-          --miner.gaslimit=800000000 \
-          --unlock 0 --password ./chaindata/node$i/pass.txt --allow-insecure-unlock \
-          --syncmode=full \
-          --txpool.accountslots=64 --txpool.globalslots=8192 \
-          --txpool.accountqueue=128 --txpool.globalqueue=4096 \
-          --txpool.lifetime=1h --txpool.pricelimit=1000000000 --txpool.pricebump=10 \
-          --miner.gasprice=1000000000 console" Enter
+        tmux send-keys -t node$i "./node_src/build/bin/geth --datadir ./chaindata/node$i --networkid $CHAINID --bootnodes $BOOTNODE --mine --port 30303 --nat extip:$IP --gpo.percentile 0 --gpo.maxprice 100 --gpo.ignoreprice 0 --miner.gaslimit=3000000000 --unlock 0 --password ./chaindata/node$i/pass.txt --syncmode=snap --txpool.accountslots=10000 --txpool.globalslots=200000 --txpool.accountqueue=10000 --txpool.globalqueue=100000 --txpool.lifetime=1h console" Enter
     fi
 
     ((i += 1))
@@ -135,58 +118,25 @@ finalize(){
   echo -e "\n${GREEN}+------------------ Active Nodes -------------------+"
   tmux ls
 
-  # Optional: peer discovery helper (off by default). Set SYNC_HELPER_ENABLED=true in .env to enable.
-  if [ "${SYNC_HELPER_ENABLED:-false}" = "true" ]; then
-    echo -e "\n${GREEN}+------------------ Starting sync-helper -------------------+${NC}"
-    echo -e "\n${ORANGE}+-- Please wait a few seconds. Do not turn off the server or interrupt --+"
-    
-    cd ./plugins/sync-helper/
-    
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-
-    # Check if sync-helper is already running
-    if pm2 list | grep -q "index"; then
-      echo -e "${ORANGE}sync-helper is already running, restarting...${NC}"
-      pm2 restart index
-    else
-      echo -e "${GREEN}Starting sync-helper...${NC}"
-      pm2 start index.js --name "sync-helper"
-    fi
-    
-    pm2 save
-    cd /root/splendor-blockchain-v4/Core-Blockchain/
-  else
-    echo -e "\n${ORANGE}+------------------ sync-helper disabled (set SYNC_HELPER_ENABLED=true to enable) -------------------+${NC}"
-  fi
-
-  # Initialize x402 native payments system
-  echo -e "\n${GREEN}+------------------ Initializing x402 Native Payments -------------------+${NC}"
+  echo -e "\n${GREEN}+------------------ Starting sync-helper -------------------+${NC}"
+  echo -e "\n${ORANGE}+-- Please wait a few seconds. Do not turn off the server or interrupt --+"
   
-  # Check if x402 configuration exists
-  if grep -q "X402_ENABLED=true" .env 2>/dev/null; then
-    echo -e "${GREEN}✅ x402 configuration found${NC}"
-    
-    # Wait for node to be ready before testing x402 API
-    echo -e "${CYAN}🕐 Waiting for node to be ready for x402 API...${NC}"
-    sleep 5
-    
-    # Test x402 API availability
-    if curl -s -X POST -H "Content-Type: application/json" \
-       --data '{"jsonrpc":"2.0","method":"x402_supported","params":[],"id":1}' \
-       http://localhost:8545 2>/dev/null | grep -q "result"; then
-      echo -e "${GREEN}✅ x402 API is available and responding${NC}"
-    else
-      echo -e "${ORANGE}⚠️  x402 API not yet available (node may still be starting)${NC}"
-    fi
-    
-    echo -e "${GREEN}🚀 x402 native payments system initialized!${NC}"
-    echo -e "${CYAN}   • Test x402 API: curl -X POST -H 'Content-Type: application/json' --data '{\"jsonrpc\":\"2.0\",\"method\":\"x402_supported\",\"params\":[],\"id\":1}' http://localhost:8545${NC}"
-    echo -e "${CYAN}   • Full test suite: ./test-x402.sh${NC}"
+  cd ./plugins/sync-helper/
+  
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+  # Check if sync-helper is already running
+  if pm2 list | grep -q "index"; then
+    echo -e "${ORANGE}sync-helper is already running, restarting...${NC}"
+    pm2 restart index
   else
-    echo -e "${ORANGE}⚠️  x402 configuration not found in .env${NC}"
-    echo -e "${CYAN}   Run node setup again to configure x402${NC}"
+    echo -e "${GREEN}Starting sync-helper...${NC}"
+    pm2 start index.js --name "sync-helper"
   fi
+  
+  pm2 save
+  cd /root/splendor-blockchain-v4/Core-Blockchain/
 
 }
 

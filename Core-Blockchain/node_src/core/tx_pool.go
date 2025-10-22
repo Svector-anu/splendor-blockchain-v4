@@ -52,9 +52,6 @@ const (
 	// more expensive to propagate; larger transactions also take more resources
 	// to validate whether they fit into the pool or not.
 	txMaxSize = 4 * txSlotSize // 128KB
-
-	// X402TxType is the transaction type for x402 payments (from x402_tx.go)
-	X402TxType = 0x50
 )
 
 var (
@@ -322,18 +319,11 @@ func NewTxPool(config TxPoolConfig, chainconfig *params.ChainConfig, chain block
 		gasPrice:        new(big.Int).SetUint64(config.PriceLimit),
 	}
 	pool.jamIndexer = newTxJamIndexer(config.JamConfig, pool)
-    pool.locals = newAccountSet(pool.signer)
-    for _, addr := range config.Locals {
-        log.Info("Setting new local account", "address", addr)
-        pool.locals.add(addr)
-    }
-    // Always treat the x402 pseudo-sender as local so gas-tip enforcement
-    // never filters system x402 envelopes.
-    x402Pseudo := common.HexToAddress("0x0000000000000000000000000000000000000402")
-    if !pool.locals.contains(x402Pseudo) {
-        log.Info("Setting new local account", "address", x402Pseudo)
-        pool.locals.add(x402Pseudo)
-    }
+	pool.locals = newAccountSet(pool.signer)
+	for _, addr := range config.Locals {
+		log.Info("Setting new local account", "address", addr)
+		pool.locals.add(addr)
+	}
 	pool.priced = newTxPricedList(pool.all)
 	pool.reset(nil, chain.CurrentBlock().Header())
 
@@ -628,15 +618,10 @@ func (pool *TxPool) local() map[common.Address]types.Transactions {
 // validateTx checks whether a transaction is valid according to the consensus
 // rules and adheres to some heuristic limits of the local node (price and size).
 func (pool *TxPool) validateTx(tx *types.Transaction, local bool) error {
-    // Accept X402 typed transactions (system settlement envelopes) without
-    // normal validation constraints. They are gasless and verified in consensus.
-    if tx.Type() == X402TxType {
-        return nil
-    }
-    // Accept only legacy transactions until EIP-2718/2930 activates.
-    if !pool.eip2718 && tx.Type() != types.LegacyTxType {
-        return ErrTxTypeNotSupported
-    }
+	// Accept only legacy transactions until EIP-2718/2930 activates.
+	if !pool.eip2718 && tx.Type() != types.LegacyTxType {
+		return ErrTxTypeNotSupported
+	}
 	// Reject dynamic fee transactions until EIP-1559 activates.
 	if !pool.eip1559 && tx.Type() == types.DynamicFeeTxType {
 		return ErrTxTypeNotSupported
@@ -666,10 +651,10 @@ func (pool *TxPool) validateTx(tx *types.Transaction, local bool) error {
 		return ErrTipAboveFeeCap
 	}
 	// Make sure the transaction is signed properly.
-    from, err := types.Sender(pool.signer, tx)
-    if err != nil {
-        return ErrInvalidSender
-    }
+	from, err := types.Sender(pool.signer, tx)
+	if err != nil {
+		return ErrInvalidSender
+	}
 	// Drop non-local transactions under our own minimal accepted gas price or tip.
 	pendingBaseFee := pool.priced.urgent.baseFee
 	if !local && tx.EffectiveGasTipIntCmp(pool.gasPrice, pendingBaseFee) < 0 {
@@ -772,12 +757,7 @@ func (pool *TxPool) add(tx *types.Transaction, local bool) (replaced bool, err e
 		}
 	}
 	// Try to replace an existing transaction in the pending pool
-    var from common.Address
-    if tx.Type() == X402TxType {
-        from = common.HexToAddress("0x0000000000000000000000000000000000000402")
-    } else {
-        from, _ = types.Sender(pool.signer, tx) // already validated
-    }
+	from, _ := types.Sender(pool.signer, tx) // already validated
 	if list := pool.pending[from]; list != nil && list.Overlaps(tx) {
 		// Nonce already pending, check if required price bump is met
 		inserted, old := list.Add(tx, pool.config.PriceBump)
@@ -802,16 +782,16 @@ func (pool *TxPool) add(tx *types.Transaction, local bool) (replaced bool, err e
 		return old != nil, nil
 	}
 	// New transaction isn't replacing a pending one, push into queue
-    replaced, err = pool.enqueueTx(hash, tx, isLocal, true)
+	replaced, err = pool.enqueueTx(hash, tx, isLocal, true)
 	if err != nil {
 		return false, err
 	}
 	// Mark local addresses and journal local transactions
-    if local && !pool.locals.contains(from) {
-        log.Info("Setting new local account", "address", from)
-        pool.locals.add(from)
-        pool.priced.Removed(pool.all.RemoteToLocals(pool.locals)) // Migrate the remotes if it's marked as local first time.
-    }
+	if local && !pool.locals.contains(from) {
+		log.Info("Setting new local account", "address", from)
+		pool.locals.add(from)
+		pool.priced.Removed(pool.all.RemoteToLocals(pool.locals)) // Migrate the remotes if it's marked as local first time.
+	}
 	if isLocal {
 		localGauge.Inc(1)
 	}
@@ -825,16 +805,11 @@ func (pool *TxPool) add(tx *types.Transaction, local bool) (replaced bool, err e
 //
 // Note, this method assumes the pool lock is held!
 func (pool *TxPool) enqueueTx(hash common.Hash, tx *types.Transaction, local bool, addAll bool) (bool, error) {
-    // Try to insert the transaction into the future queue
-    var from common.Address
-    if tx.Type() == X402TxType {
-        from = common.HexToAddress("0x0000000000000000000000000000000000000402")
-    } else {
-        from, _ = types.Sender(pool.signer, tx) // already validated
-    }
-    if pool.queue[from] == nil {
-        pool.queue[from] = newTxList(false)
-    }
+	// Try to insert the transaction into the future queue
+	from, _ := types.Sender(pool.signer, tx) // already validated
+	if pool.queue[from] == nil {
+		pool.queue[from] = newTxList(false)
+	}
 	inserted, old := pool.queue[from].Add(tx, pool.config.PriceBump)
 	if !inserted {
 		// An older transaction was better, discard this
@@ -961,34 +936,30 @@ func (pool *TxPool) AddRemote(tx *types.Transaction) error {
 
 // addTxs attempts to queue a batch of transactions if they are valid.
 func (pool *TxPool) addTxs(txs []*types.Transaction, local, sync bool) []error {
-    // Filter out known ones without obtaining the pool lock or recovering signatures
-    var (
-        errs = make([]error, len(txs))
-        news = make([]*types.Transaction, 0, len(txs))
-    )
-    for i, tx := range txs {
-        // If the transaction is known, pre-set the error slot
-        if pool.all.Get(tx.Hash()) != nil {
-            errs[i] = ErrAlreadyKnown
-            knownTxMeter.Mark(1)
-            continue
-        }
-        // For native x402 typed envelopes, skip sender recovery here since
-        // they are system settlements verified in consensus.
-        if tx.Type() != X402TxType {
-            // Exclude transactions with invalid signatures as soon as
-            // possible and cache senders in transactions before
-            // obtaining lock
-            _, err := types.Sender(pool.signer, tx)
-            if err != nil {
-                errs[i] = ErrInvalidSender
-                invalidTxMeter.Mark(1)
-                continue
-            }
-        }
-        // Accumulate all unknown transactions for deeper processing
-        news = append(news, tx)
-    }
+	// Filter out known ones without obtaining the pool lock or recovering signatures
+	var (
+		errs = make([]error, len(txs))
+		news = make([]*types.Transaction, 0, len(txs))
+	)
+	for i, tx := range txs {
+		// If the transaction is known, pre-set the error slot
+		if pool.all.Get(tx.Hash()) != nil {
+			errs[i] = ErrAlreadyKnown
+			knownTxMeter.Mark(1)
+			continue
+		}
+		// Exclude transactions with invalid signatures as soon as
+		// possible and cache senders in transactions before
+		// obtaining lock
+		_, err := types.Sender(pool.signer, tx)
+		if err != nil {
+			errs[i] = ErrInvalidSender
+			invalidTxMeter.Mark(1)
+			continue
+		}
+		// Accumulate all unknown transactions for deeper processing
+		news = append(news, tx)
+	}
 	if len(news) == 0 {
 		return errs
 	}
@@ -1017,19 +988,15 @@ func (pool *TxPool) addTxs(txs []*types.Transaction, local, sync bool) []error {
 // addTxsLocked attempts to queue a batch of transactions if they are valid.
 // The transaction pool lock must be held.
 func (pool *TxPool) addTxsLocked(txs []*types.Transaction, local bool) ([]error, *accountSet) {
-    dirty := newAccountSet(pool.signer)
-    errs := make([]error, len(txs))
-    for i, tx := range txs {
-        replaced, err := pool.add(tx, local)
-        errs[i] = err
-        if err == nil && !replaced {
-            if tx.Type() == X402TxType {
-                dirty.add(common.HexToAddress("0x0000000000000000000000000000000000000402"))
-            } else {
-                dirty.addTx(tx)
-            }
-        }
-    }
+	dirty := newAccountSet(pool.signer)
+	errs := make([]error, len(txs))
+	for i, tx := range txs {
+		replaced, err := pool.add(tx, local)
+		errs[i] = err
+		if err == nil && !replaced {
+			dirty.addTx(tx)
+		}
+	}
 	validTxMeter.Mark(int64(len(dirty.accounts)))
 	return errs, dirty
 }
@@ -1413,27 +1380,11 @@ func (pool *TxPool) promoteExecutables(accounts []common.Address) []*types.Trans
 	var promoted []*types.Transaction
 
 	// Iterate over all accounts and promote any executable transactions
-    for _, addr := range accounts {
-        // Special-case: promote all x402 system envelopes (pseudo address 0x...0402)
-        if addr == common.HexToAddress("0x0000000000000000000000000000000000000402") {
-            if list := pool.queue[addr]; list != nil {
-                txs := list.Flatten()
-                for _, tx := range txs {
-                    hash := tx.Hash()
-                    if pool.promoteTx(addr, hash, tx) {
-                        promoted = append(promoted, tx)
-                    }
-                }
-                queuedGauge.Dec(int64(len(txs)))
-                delete(pool.queue, addr)
-                delete(pool.beats, addr)
-            }
-            continue
-        }
-        list := pool.queue[addr]
-        if list == nil {
-            continue // Just in case someone calls with a non existing account
-        }
+	for _, addr := range accounts {
+		list := pool.queue[addr]
+		if list == nil {
+			continue // Just in case someone calls with a non existing account
+		}
 		// Drop all transactions that are deemed too old (low nonce)
 		forwards := list.Forward(pool.currentState.GetNonce(addr))
 		for _, tx := range forwards {
@@ -1659,21 +1610,20 @@ func (pool *TxPool) demoteUnexecutables() {
 		if pool.locals.contains(addr) {
 			localGauge.Dec(int64(ln))
 		}
-        // If there's a gap in front, alert (should never happen) and postpone all transactions
-        // Special-case: x402 pseudo-sender does not enforce contiguous nonces
-        if addr != common.HexToAddress("0x0000000000000000000000000000000000000402") && list.Len() > 0 && list.txs.Get(nonce) == nil {
-            gapped := list.Cap(0)
-            for _, tx := range gapped {
-                hash := tx.Hash()
-                log.Error("Demoting invalidated transaction", "hash", hash)
+		// If there's a gap in front, alert (should never happen) and postpone all transactions
+		if list.Len() > 0 && list.txs.Get(nonce) == nil {
+			gapped := list.Cap(0)
+			for _, tx := range gapped {
+				hash := tx.Hash()
+				log.Error("Demoting invalidated transaction", "hash", hash)
 
 				// Internal shuffle shouldn't touch the lookup set.
 				pool.enqueueTx(hash, tx, false, false)
 			}
-            pendingGauge.Dec(int64(len(gapped)))
-            // This might happen in a reorg, so log it to the metering
-            blockReorgInvalidatedTx.Mark(int64(len(gapped)))
-        }
+			pendingGauge.Dec(int64(len(gapped)))
+			// This might happen in a reorg, so log it to the metering
+			blockReorgInvalidatedTx.Mark(int64(len(gapped)))
+		}
 		// Delete the entire pending entry if it became empty.
 		if list.Empty() {
 			delete(pool.pending, addr)

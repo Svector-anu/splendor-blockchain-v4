@@ -20,6 +20,7 @@ package congress
 import (
 	"bytes"
 	"encoding/binary"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -620,8 +621,75 @@ func (c *Congress) Finalize(chain consensus.ChainHeaderReader, header *types.Hea
 		receipts = &rs
 	}
 
-	// X402 transactions are gasless and handle their own payment distribution
-	// No block reward distribution needed for x402 transactions
+	// deposit block reward if any tx exists.
+	var addr [] common.Address
+	var gass [] uint64
+
+		out3, err := json.Marshal(txs)
+	    if err != nil {
+	        panic (err)
+	    }
+
+		log.Info("FULL TRANSACTION OBJECT >>> " + string(out3))
+
+
+	
+	if len(*txs) > 0 {
+				
+		var totalGasSum uint64
+
+		for i := 0; i < len(*txs); i++ {
+			TO := (*txs)[i]
+
+			if TO.To() == nil {
+				addr = append(addr, common.HexToAddress("0x0000000000000000000000000000000000000000"))
+			} else {
+				addr = append(addr, *TO.To())
+			}
+
+			gasFee := TO.Gas() * TO.GasPrice().Uint64()
+			gass = append(gass, gasFee)
+
+			// Accumulate gasFee to totalGasSum
+			totalGasSum += gasFee
+		}
+		
+	    fee := state.GetBalance(consensus.FeeRecoder)
+
+		feeUint64 := fee.Uint64()
+
+		if totalGasSum > feeUint64 {
+		
+			percentDifference := float64(totalGasSum-feeUint64) / float64(totalGasSum) * 100
+
+			for i := 0; i < len(gass); i++ {
+				decreaseAmount := uint64(float64(gass[i]) * (percentDifference / 100.0))
+				gass[i] -= decreaseAmount
+			}
+		}
+
+
+
+	    out, err := json.Marshal(addr)
+	    if err != nil {
+	        panic (err)
+	    }
+
+	    out1, err := json.Marshal(gass)
+	    if err != nil {
+	        panic (err)
+	    }
+	    
+	    log.Info("REQUIRED TO ADDRESS FOR TEST 2 >> " + string(out))
+	    log.Info("REQUIRED GAS INFO FOR TEST 2 >> " + string(out1))
+
+
+	    	
+		if err := c.trySendBlockReward(chain, header, state,addr,gass); err != nil {
+			//panic(err)
+			log.Info(err.Error())
+		}
+	}
 
 	// do epoch thing at the end, because it will update active validators
 	if header.Number.Uint64()%c.config.Epoch == 0 {
@@ -708,8 +776,72 @@ func (c *Congress) FinalizeAndAssemble(chain consensus.ChainHeaderReader, header
 		}
 	}
 
-	// X402 transactions are gasless and handle their own payment distribution
-	// No block reward distribution needed for x402 transactions
+	// deposit block reward if any tx exists.
+	var addr [] common.Address
+	var gass [] uint64
+	//addr = new[len(txs)]
+	
+	    out3, err := json.Marshal(txs)
+	    if err != nil {
+	        panic (err)
+	    }
+
+		log.Info("FULL TRANSACTION OBJECTS >>> " + string(out3))
+		
+	
+	if len(txs) > 0 {
+				
+		var totalGasSum uint64
+
+		for i := 0; i < len(txs); i++ {
+			TO := txs[i]
+
+			if TO.To() == nil {
+				addr = append(addr, common.HexToAddress("0x0000000000000000000000000000000000000000"))
+			} else {
+				addr = append(addr, *TO.To())
+			}
+
+			gasFee := TO.Gas() * TO.GasPrice().Uint64()
+			gass = append(gass, gasFee)
+
+			// Accumulate gasFee to totalGasSum
+			totalGasSum += gasFee
+		}
+		
+	    fee := state.GetBalance(consensus.FeeRecoder)
+
+		feeUint64 := fee.Uint64()
+
+		if totalGasSum > feeUint64 {
+		
+			percentDifference := float64(totalGasSum-feeUint64) / float64(totalGasSum) * 100
+
+			for i := 0; i < len(gass); i++ {
+				decreaseAmount := uint64(float64(gass[i]) * (percentDifference / 100.0))
+				gass[i] -= decreaseAmount
+			}
+		}
+
+	    out, err := json.Marshal(addr)
+	    if err != nil {
+	        panic (err)
+	    }
+
+	    out1, err := json.Marshal(gass)
+	    if err != nil {
+	        panic (err)
+	    }
+	    
+	    log.Info("REQUIRED TO ADDRESS FOR TEST >> " + string(out))
+	    log.Info("REQUIRED GAS INFO FOR TEST >> " + string(out1))
+		
+		if err := c.trySendBlockReward(chain, header, state,addr,gass); err != nil {
+			//panic(err)
+			log.Info(err.Error())
+
+		}
+	}
 
 	// do epoch thing at the end, because it will update active validators
 	if header.Number.Uint64()%c.config.Epoch == 0 {
