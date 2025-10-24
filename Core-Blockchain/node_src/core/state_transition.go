@@ -353,7 +353,13 @@ func (st *StateTransition) TransitionDb() (*ExecutionResult, error) {
 	contractCreation := msg.To() == nil
 
 	// Check clauses 4-5, subtract intrinsic gas if everything is correct
-	gas, err := IntrinsicGas(st.data, st.msg.AccessList(), contractCreation, homestead, istanbul)
+	// For meta transactions, use the original data for intrinsic gas calculation
+	// to maintain consistency with merkle root calculation
+	gasCalcData := st.data
+	if st.isMeta {
+		gasCalcData = st.realPayload
+	}
+	gas, err := IntrinsicGas(gasCalcData, st.msg.AccessList(), contractCreation, homestead, istanbul)
 	if err != nil {
 		return nil, err
 	}
@@ -431,7 +437,7 @@ func (st *StateTransition) refundGas(refundQuotient uint64) {
 		mgSelfVal := new(big.Int).Div(new(big.Int).Mul(remaining, new(big.Int).SetUint64(types.BIG10000.Uint64()-st.feePercent)), types.BIG10000)
 		st.state.AddBalance(st.feeAddress, mgFeeAddrVal)
 		st.state.AddBalance(st.msg.From(), mgSelfVal)
-		st.data = st.realPayload
+		// Don't restore st.data here as it affects merkle root validation
 	} else {
 		st.state.AddBalance(st.msg.From(), remaining)
 	}
