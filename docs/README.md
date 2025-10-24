@@ -4,7 +4,7 @@ Welcome to the comprehensive documentation for Splendor Blockchain V4. This docu
 
 ## 📁 Documentation Structure
 
-Our documentation is organized into four main categories for easy navigation:
+Our documentation is organized into seven main categories for easy navigation:
 
 ### 📖 [Guides](guides/) - Getting Started & How-To Guides
 Perfect for newcomers and users looking for step-by-step instructions.
@@ -23,6 +23,26 @@ In-depth technical documentation for developers building on Splendor.
 - **[Smart Contracts](technical/SMART_CONTRACTS.md)** - System contracts and deployment guide
 - **[Parallel Processing Guide](technical/PARALLEL_PROCESSING_GUIDE.md)** - Advanced performance optimization
 
+### 💳 [X402 Payment Protocol](x402/) - HTTP 402 Payment Required
+Complete documentation for the X402 payment protocol implementation.
+
+- **[X402 Middleware Guide](../Core-Blockchain/x402-middleware/README.md)** - **START HERE!** 1-line integration with working examples
+- **[X402 Overview](x402/README.md)** - Introduction to X402 payment protocol
+- **[Payment Implementation Guide](x402/PAYMENT_IMPLEMENTATION.md)** - Complete technical implementation guide
+- **[Developer Integration](x402/developer-integration.md)** - Integration guide for developers
+- **[Payment Guide](x402/payment-guide.md)** - How to use X402 payments
+- **[Native Payments](x402/native-payments.md)** - Native SPLD payment implementation
+- **[Developer Pitch](x402/DEVELOPER_PITCH.md)** - Why use X402
+- **[Diagrams](x402/diagrams.md)** - Visual architecture diagrams
+- **[Examples](x402/examples/)** - Code examples and tutorials
+
+### 🔒 [Security](security/) - Security Audits & Reports
+Security documentation, audit reports, and vulnerability fixes.
+
+- **[Security Audit Report](security/SECURITY_AUDIT_REPORT.md)** - Comprehensive security audit
+- **[Security Summary](security/SECURITY_SUMMARY.md)** - Executive summary of security status
+- **[Security Fixes Applied](security/SECURITY_FIXES_APPLIED.md)** - Documented security patches
+
 ### 🏛️ [Governance](governance/) - Community & Project Management
 Information about project governance, community guidelines, and development roadmap.
 
@@ -35,8 +55,15 @@ Information about project governance, community guidelines, and development road
 Deployment guides, infrastructure setup, and operational documentation.
 
 - **[Deployment Guide](deployment/DEPLOYMENT_GUIDE.md)** - Complete deployment instructions
+- **[Deployment Required](deployment/DEPLOYMENT_REQUIRED.md)** - Required deployment steps
 - **[Parallel Processing Summary](deployment/PARALLEL_PROCESSING_SUMMARY.md)** - Performance optimization summary
 - **[Project Structure](deployment/PROJECT_STRUCTURE.md)** - Codebase organization and architecture
+
+### 📝 [Changelog](changelog/) - Version History
+Track changes, updates, and version history.
+
+- **[CHANGELOG.md](changelog/CHANGELOG.md)** - Detailed version history
+- **[CHANGES.md](changelog/CHANGES.md)** - Recent changes and updates
 
 ## 🚀 Quick Navigation
 
@@ -49,6 +76,7 @@ Deployment guides, infrastructure setup, and operational documentation.
 - [Development Setup](governance/CONTRIBUTING.md#development-setup)
 - [API Endpoints](technical/API_REFERENCE.md#endpoints)
 - [Smart Contract Integration](technical/SMART_CONTRACTS.md#integration-guide)
+- [X402 Integration](x402/developer-integration.md)
 - [Testing Framework](governance/CONTRIBUTING.md#testing-guidelines)
 
 ### 🏗️ For Validators
@@ -98,6 +126,16 @@ In-depth technical documentation for developers building on Splendor. Includes A
 
 **Popular**: [API Reference](technical/API_REFERENCE.md) | [Smart Contracts](technical/SMART_CONTRACTS.md)
 
+### 💳 X402 Payment Protocol
+Revolutionary HTTP 402 payment protocol for monetizing APIs and services with micropayments.
+
+**Start Here**: [X402 Overview](x402/README.md) | [Developer Integration](x402/developer-integration.md)
+
+### 🔒 Security Documentation
+Comprehensive security audits, vulnerability reports, and security best practices.
+
+**Key Documents**: [Security Audit Report](security/SECURITY_AUDIT_REPORT.md) | [Security Summary](security/SECURITY_SUMMARY.md)
+
 ### 🏛️ Governance & Community
 Information about project governance, how to contribute, community guidelines, and the development roadmap.
 
@@ -107,6 +145,11 @@ Information about project governance, how to contribute, community guidelines, a
 Deployment guides, infrastructure setup, and operational documentation for running Splendor nodes and services.
 
 **Essential**: [Deployment Guide](deployment/DEPLOYMENT_GUIDE.md) | [Project Structure](deployment/PROJECT_STRUCTURE.md)
+
+### 📝 Version History
+Track all changes, updates, and improvements to the Splendor blockchain.
+
+**Latest**: [CHANGELOG.md](changelog/CHANGELOG.md)
 
 ## 🆘 Getting Help
 
@@ -158,27 +201,13 @@ This documentation is actively maintained and updated regularly. Key information
 - **Last Updated**: January 2025
 - **Version**: 4.0.0
 - **Update Frequency**: Weekly for minor updates, immediately for critical changes
-- **Changelog**: See [CHANGELOG.md](../CHANGELOG.md) for detailed update history
+- **Changelog**: See [CHANGELOG.md](changelog/CHANGELOG.md) for detailed update history
 
 ### Staying Updated
 - **Watch** the GitHub repository for notifications
 - **Follow** our social media channels
 - **Subscribe** to our newsletter (coming soon)
 - **Join** community channels for real-time updates
-
-## 📊 Documentation Metrics
-
-We track documentation usage to improve content:
-- Most viewed pages
-- Common search queries
-- User feedback and ratings
-- Community questions and issues
-
-Help us improve by:
-- Rating documentation pages
-- Providing feedback through GitHub issues
-- Participating in documentation surveys
-- Suggesting new content topics
 
 ## 🎯 Popular Documentation Paths
 
@@ -192,6 +221,7 @@ Help us improve by:
 2. [Hardhat Setup Guide](guides/HARDHAT_SETUP_GUIDE.md) - Set up development environment
 3. [Smart Contracts](technical/SMART_CONTRACTS.md) - Deploy your first contract
 4. [API Reference](technical/API_REFERENCE.md) - Integrate with the blockchain
+5. [X402 Integration](x402/developer-integration.md) - Add payment protocol
 
 ### Validator Journey
 1. [Validator Guide](guides/VALIDATOR_GUIDE.md) - Complete validator setup

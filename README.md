@@ -72,7 +72,9 @@ npm run verify
 
 **📖 [Complete Documentation Hub](docs/README.md)** - Your one-stop resource for all Splendor documentation
 
-### 📖 User Guides
+### Quick Links by Category
+
+#### 📖 [User Guides](docs/guides/)
 - **[Getting Started Guide](docs/guides/GETTING_STARTED.md)** - Complete setup and installation
 - **[MetaMask Setup](docs/guides/METAMASK_SETUP.md)** - Wallet configuration for mainnet
 - **[Validator Guide](docs/guides/VALIDATOR_GUIDE.md)** - Run validators and earn rewards
@@ -80,21 +82,37 @@ npm run verify
 - **[Hardhat Setup Guide](docs/guides/HARDHAT_SETUP_GUIDE.md)** - Development environment setup
 - **[Troubleshooting](docs/guides/TROUBLESHOOTING.md)** - Common issues and solutions
 
-### 🔧 Technical Documentation
+#### 🔧 [Technical Documentation](docs/technical/)
 - **[API Reference](docs/technical/API_REFERENCE.md)** - Complete API documentation
 - **[Smart Contract Development](docs/technical/SMART_CONTRACTS.md)** - Build and deploy contracts
 - **[Parallel Processing Guide](docs/technical/PARALLEL_PROCESSING_GUIDE.md)** - Advanced performance optimization
 
-### 🏛️ Governance & Community
+#### 💳 [X402 Payment Protocol](docs/x402/)
+- **[X402 Middleware Guide](Core-Blockchain/x402-middleware/README.md)** - **START HERE!** 1-line integration with working examples
+- **[X402 Overview](docs/x402/README.md)** - HTTP 402 payment protocol introduction
+- **[Developer Integration](docs/x402/developer-integration.md)** - Integration guide for developers
+- **[Payment Guide](docs/x402/payment-guide.md)** - How to use X402 payments
+- **[Payment Implementation](docs/x402/PAYMENT_IMPLEMENTATION.md)** - Complete technical implementation guide
+
+#### 🔒 [Security](docs/security/)
+- **[Security Audit Report](docs/security/SECURITY_AUDIT_REPORT.md)** - Comprehensive security audit
+- **[Security Summary](docs/security/SECURITY_SUMMARY.md)** - Executive summary of security status
+- **[Security Fixes](docs/security/SECURITY_FIXES_APPLIED.md)** - Documented security patches
+
+#### 🏛️ [Governance & Community](docs/governance/)
 - **[Roadmap](docs/governance/ROADMAP.md)** - Development roadmap and future plans
 - **[Contributing Guide](docs/governance/CONTRIBUTING.md)** - How to contribute to the project
 - **[Security Policy](docs/governance/SECURITY.md)** - Security practices and vulnerability reporting
 - **[Code of Conduct](docs/governance/CODE_OF_CONDUCT.md)** - Community guidelines
 
-### 🚀 Deployment & Operations
+#### 🚀 [Deployment & Operations](docs/deployment/)
 - **[Deployment Guide](docs/deployment/DEPLOYMENT_GUIDE.md)** - Complete deployment instructions
 - **[Project Structure](docs/deployment/PROJECT_STRUCTURE.md)** - Codebase organization and architecture
 - **[Parallel Processing Summary](docs/deployment/PARALLEL_PROCESSING_SUMMARY.md)** - Performance optimization summary
+
+#### 📝 [Changelog](docs/changelog/)
+- **[CHANGELOG.md](docs/changelog/CHANGELOG.md)** - Detailed version history
+- **[CHANGES.md](docs/changelog/CHANGES.md)** - Recent changes and updates
 
 ## 🏗️ Architecture
 
