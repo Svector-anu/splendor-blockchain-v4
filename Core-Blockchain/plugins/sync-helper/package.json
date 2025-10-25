@@ -9,6 +9,10 @@
   },
   "author": "hide001, marvelous-bot",
   "license": "ISC",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
   "dependencies": {
     "axios": "^1.7.3",
     "web3": "^4.11.1",

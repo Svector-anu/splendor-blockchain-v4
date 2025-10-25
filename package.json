@@ -38,8 +38,8 @@
   },
   "homepage": "https://github.com/Splendor-Protocol/splendor-blockchain-v4#readme",
   "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=7.0.0",
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0",
     "go": ">=1.15.0"
   },
   "dependencies": {
