@@ -37,6 +37,9 @@ Splendor Blockchain V4 is a production-ready mainnet that combines the best of E
 | **Currency Symbol** | SPLD |
 | **Block Explorer** | https://explorer.splendor.org/ |
 | **Block Time** | 1 second |
+| **Total Supply** | 26,000,000,000 SPLD |
+| **Circulating Supply** | https://cs.splendor.org/circulatingsupply |
+| **Genesis File** | [genesis.json](Core-Blockchain/genesis.json) |
 
 ### Connect to Mainnet
 
