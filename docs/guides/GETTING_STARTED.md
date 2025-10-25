@@ -6,7 +6,7 @@ This guide will help you get up and running with the Splendor Blockchain V4 main
 
 Before you begin, ensure you have the following installed:
 
-- **Node.js** (v16 or higher) - [Download here](https://nodejs.org/)
+- **Node.js** (v20 LTS recommended) - Installed automatically via setup script
 - **Go** (v1.15 or higher) - [Download here](https://golang.org/dl/)
 - **npm** (comes with Node.js) or **yarn**
 - **Git** - [Download here](https://git-scm.com/)

@@ -69,6 +69,25 @@ SERVICE_FILE="/etc/systemd/system/splendor-validator.service"
 
 echo -e "${ORANGE}Creating systemd service file...${NC}"
 
+# Detect Node.js version dynamically
+NODE_VERSION=""
+if [ -d "/root/.nvm/versions/node" ]; then
+    # Get the default Node.js version from NVM
+    export NVM_DIR="/root/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+    NODE_VERSION=$(nvm version default 2>/dev/null || nvm version 2>/dev/null || echo "")
+    if [ -n "$NODE_VERSION" ]; then
+        NODE_PATH="/root/.nvm/versions/node/$NODE_VERSION/bin"
+        echo -e "${GREEN}Detected Node.js version: $NODE_VERSION${NC}"
+    else
+        NODE_PATH="/root/.nvm/versions/node/v20.0.0/bin"
+        echo -e "${ORANGE}Could not detect Node.js version, using default path${NC}"
+    fi
+else
+    NODE_PATH="/root/.nvm/versions/node/v20.0.0/bin"
+    echo -e "${ORANGE}NVM not found, using default Node.js path${NC}"
+fi
+
 cat > "$SERVICE_FILE" << EOF
 [Unit]
 Description=Splendor Blockchain Validator Node
@@ -80,7 +99,7 @@ Type=oneshot
 RemainAfterExit=yes
 User=root
 WorkingDirectory=$BLOCKCHAIN_DIR
-Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.nvm/versions/node/v21.7.1/bin
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$NODE_PATH
 Environment=NVM_DIR=/root/.nvm
 ExecStartPre=/bin/sleep 30
 ExecStart=$BLOCKCHAIN_DIR/startup-wrapper.sh

@@ -177,8 +177,8 @@ Before diving into specific issues, run through this quick checklist:
    node --version
    npm --version
    
-   # Install Node.js 16+ from https://nodejs.org/
-   # Or use nvm (recommended)
+   # Node.js 20 LTS is installed automatically by node-setup.sh
+   # Or install manually from https://nodejs.org/
    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
    nvm install 18
    nvm use 18

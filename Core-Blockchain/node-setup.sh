@@ -307,7 +307,7 @@ install_nvm() {
   # Check if nvm is installed
   if ! command -v nvm &> /dev/null; then
     echo "Installing NVM..."
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 
     # Source NVM scripts for the current session
     export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
@@ -335,25 +335,41 @@ install_nvm() {
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
-  # Install Node.js version 21.7.1 using nvm
-  echo "Installing Node.js version 21.7.1..."
-  nvm install 21.7.1
+  # Check current Node.js version
+  current_node_version=$(node --version 2>/dev/null || echo "none")
+  echo "Current Node.js version: $current_node_version"
 
-  # Use the installed Node.js version
-  nvm use 21.7.1
+  # Check if Node.js 20 is already installed
+  if nvm ls 20 &>/dev/null; then
+    echo "Node.js 20 is already installed."
+    nvm use 20
+    nvm alias default 20
+  else
+    # Install Node.js LTS version 20.x using nvm
+    echo "Installing Node.js LTS version 20..."
+    nvm install 20
+    nvm use 20
+    nvm alias default 20
+  fi
 
   # Verify the installation
   node_version=$(node --version)
-  if [[ $node_version == v21.7.1 ]]; then
-    echo "Node.js version 21.7.1 installed successfully: $node_version"
+  echo "Node.js version in use: $node_version"
+
+  # Check if yarn and pm2 are already installed globally
+  if ! command -v yarn &> /dev/null; then
+    echo "Installing yarn globally..."
+    npm install --global yarn
   else
-    echo "There was an issue installing Node.js version 21.7.1."
+    echo "yarn is already installed: $(yarn --version)"
   fi
 
-  source ~/.bashrc
-
-  npm install --global yarn
-  npm install --global pm2
+  if ! command -v pm2 &> /dev/null; then
+    echo "Installing pm2 globally..."
+    npm install --global pm2
+  else
+    echo "pm2 is already installed: $(pm2 --version)"
+  fi
 
   source ~/.bashrc
 }

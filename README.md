@@ -6,7 +6,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go Version](https://img.shields.io/badge/Go-1.15+-blue.svg)](https://golang.org)
-[![Node Version](https://img.shields.io/badge/Node-16+-green.svg)](https://nodejs.org)
+[![Node Version](https://img.shields.io/badge/Node-20_LTS-green.svg)](https://nodejs.org)
 [![Network Status](https://img.shields.io/badge/Mainnet-Live-brightgreen.svg)](https://mainnet-rpc.splendor.org/)
 
 A high-performance, enterprise-grade blockchain with Congress consensus mechanism, designed for scalability, security, and exceptional developer experience.
