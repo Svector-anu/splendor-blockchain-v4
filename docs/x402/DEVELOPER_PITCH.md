@@ -1,95 +1,138 @@
-# X402: Stripe for Web3 🚀
+# X402: Zero-Fee Micropayments for Web3 🚀
 
 ## The Game Changer
 
-X402 is **instant wallet-based payment verification** with **flexible settlement** - essentially **Stripe for Web3**.
+X402 is **instant payment verification** built into Splendor's blockchain - enabling **true micropayments** with **zero fees** and **100% revenue** to developers.
 
-## Why This is Huge
+## Why This is Revolutionary
 
 ### 🎯 **For Developers**
+- **100% revenue** - keep all payment revenue, zero platform fees
 - **Monetize any API endpoint** with pay-per-use
-- **Instant payment verification** with user wallets
-- **No complex blockchain setup** required
-- **Standard Web3 patterns** (ethers.js, MetaMask, WalletConnect)
+- **Instant payment verification** (1 second settlement)
+- **1-line integration** - add payments instantly
+- **No gas fees** for users - better UX
 
 ### 🎯 **For End Users**
-- **Just sign with their wallet** (like any dApp)
-- **No node setup, no etherbase, no complexity**
-- **Instant payment confirmation**
-- **Works with MetaMask, WalletConnect, etc.**
+- **Zero gas fees** - just pay for the service
+- **Simple signing** - like any dApp
+- **Instant access** - no waiting for confirmations
+- **Works everywhere** - MetaMask, WalletConnect, or any wallet
 
-### 🎯 **For Services**
-- **Handle settlement like any Web3 service**
-- **Use your own infrastructure for gas**
-- **Standard private key signing**
-- **No weird blockchain configs leak into production**
+### 🎯 **For AI Agents**
+- **Private key signing** - no browser needed
+- **Autonomous payments** - agents pay for APIs themselves
+- **Perfect for bots** - programmatic payment creation
+- **No human interaction** - fully automated
 
 ## Real-World Use Cases
 
 ### 💰 **Pay-Per-Use APIs**
 ```javascript
-// User signs payment with MetaMask
+// User (or AI agent) signs payment
+const wallet = new ethers.Wallet(privateKey);
 const signature = await wallet.signMessage(paymentMessage);
 
-// Your API instantly verifies
-const verification = await rpc.call("x402_verify", [req, pay]);
+// Your API instantly verifies (no blockchain wait!)
+const verification = await rpc.call("x402_verify", [requirements, payment]);
 // Returns: { "isValid": true }
 
-// Your backend handles settlement (standard Web3)
-const tx = await yourWallet.sendTransaction(settlementTx);
+// Settlement happens automatically on-chain
+// You receive 100% of the payment instantly
+```
+
+### 🤖 **AI Agent Payments**
+```javascript
+// AI agent autonomously pays for data
+class AIAgent {
+  async getData() {
+    const payment = await this.signPayment('0.001');
+    const data = await axios.get('https://api.example.com/data', {
+      headers: { 'X-Payment': payment }
+    });
+    return data;
+  }
+}
 ```
 
 ### 🔐 **Content Paywalls**
 - Users pay with wallet signature
 - Instant access verification
-- Your service handles blockchain settlement
+- 100% revenue to content creator
 
 ### 🌐 **API Monetization**
 - Protect endpoints with X402 middleware
-- Users pay per request with wallet
-- Scale without blockchain complexity
+- Users pay per request
+- Scale without complexity
 
 ## Architecture: Clean & Simple
 
 ```
-User Wallet → Sign Payment → x402_verify → Instant Access
-     ↓
-Your Service → Handle Settlement → Standard Web3 TX
+User/Agent → Sign Payment → x402_verify → Instant Access
+                                ↓
+                         Blockchain Settlement (1 sec)
+                                ↓
+                         100% Revenue to You
 ```
+
+## Payment Methods
+
+### Option 1: Private Key (AI Agents, Bots, Scripts)
+```javascript
+const wallet = new ethers.Wallet('0xPrivateKey');
+const signature = await wallet.signMessage(message);
+// Perfect for automation!
+```
+
+### Option 2: Wallet Extensions (Human Users)
+```javascript
+const provider = new ethers.BrowserProvider(window.ethereum);
+const signer = await provider.getSigner();
+const signature = await signer.signMessage(message);
+// Works with MetaMask, WalletConnect, etc.
+```
+
+**Both work identically** - choose based on your use case!
 
 ## Developer Experience
 
 ### ✅ **What Works Today**
-- **Perfect signature verification**: `x402_verify` returns `"isValid": true`
-- **Wallet compatibility**: Standard EIP-191 signing
-- **Live RPC**: Production endpoint ready
+- **Perfect signature verification**: `x402_verify` returns instant validation
+- **Zero gas fees**: Users don't pay blockchain fees
+- **100% revenue**: You keep all payment revenue
+- **Live RPC**: Production endpoint ready at mainnet-rpc.splendor.org
 - **Complete validation**: Security, timing, balance checks
+- **AI agent compatible**: Works with private keys
 
-### ✅ **No Blockchain Changes Needed**
-- Chain is production-ready
-- Standard Web3 development patterns
-- Use existing tools (ethers.js, web3.js)
-- Handle gas in your own infrastructure
+### ✅ **Simple Integration**
+```javascript
+// Add to any Express.js API
+app.use('/api', splendorX402Express({
+  payTo: '0xYourWallet',
+  pricing: { '/api/premium': '0.01' }
+}));
+```
 
 ## Getting Started
 
-1. **User signs payment** (MetaMask/WalletConnect)
+1. **User/Agent signs payment** (private key or MetaMask)
 2. **Call x402_verify** (instant validation)
 3. **Grant access** (immediate)
-4. **Handle settlement** (your Web3 backend)
+4. **Settlement automatic** (1 second on-chain)
 
 ## The Bottom Line
 
-**X402 eliminates the complexity of blockchain payments while keeping all the benefits.**
+**X402 makes micropayments practical for the first time:**
 
-- ✅ Instant verification
-- ✅ Wallet-native UX  
-- ✅ Developer-friendly
-- ✅ Production-ready
-- ✅ No weird configs
+- ✅ **100% revenue** to developers
+- ✅ **Zero fees** for users
+- ✅ **Instant settlement** (1 second)
+- ✅ **AI agent ready** (private key signing)
+- ✅ **Human friendly** (wallet extensions)
+- ✅ **Production ready** (live mainnet)
 
-**It's Stripe for Web3 - and it's ready now.** 🚀
+**It's the payment system Web3 has been waiting for.** 🚀
 
 ---
 
-*Ready to build the future of Web3 payments? Check out our [Developer Integration Guide](developer-integration.md) and [Examples](examples/) to get started.*
+*Ready to build? Check out our [X402 Middleware Guide](../../Core-Blockchain/x402-middleware/README.md) to get started in minutes.*

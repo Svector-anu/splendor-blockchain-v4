@@ -18,12 +18,13 @@ Splendor Blockchain V4 is a production-ready mainnet that combines the best of E
 ### Key Features
 
 - **⚡ Ultra High Performance**: 1 second block times with 10,000 TPS capacity
-- **� Advanced Parallel Processing**: 49x speedup with multi-core optimization
-- **�🔒 Enterprise Security**: Congress consensus with Byzantine fault tolerance
+- **🔧 Advanced Parallel Processing**: 49x speedup with multi-core optimization
+- **🔒 Enterprise Security**: Congress consensus with Byzantine fault tolerance
 - **💰 Low Fees**: Minimal transaction costs for all operations
 - **🔗 Ethereum Compatible**: Full EVM compatibility with existing tools
 - **🏛️ Decentralized Governance**: Community-driven validator system
 - **🛡️ Battle-Tested**: Comprehensive security audits and stress testing
+- **💳 X402 Native Payments**: World's first blockchain with built-in micropayments (zero fees, 100% revenue)
 
 ## 🚀 Quick Start
 
@@ -141,6 +142,47 @@ Pre-deployed contracts for network governance:
 - **Proposal** (`0x...F002`): Governance proposals and voting
 - **Slashing** (`0x...F007`): Misbehavior detection and penalties
 <!-- - **Params** (`0x...F004`): Network parameter management -->
+
+## 💳 X402 Native Payments - World's First!
+
+Splendor is the **world's first blockchain** with **native X402 micropayments** built into the consensus layer.
+
+### 🎯 What is X402?
+
+**Instant, zero-fee micropayments for APIs and services** - perfect for AI agents and pay-per-use business models.
+
+```javascript
+// Add payments to any API in 1 line
+app.use('/api', splendorX402Express({
+  payTo: '0xYourWallet',
+  pricing: { '/api/premium': '0.01' }  // $0.01 per request
+}));
+```
+
+### ✨ Key Benefits
+
+- **💯 100% Revenue**: Keep all payment revenue - zero platform fees
+- **⚡ Instant Settlement**: Payments settle in 1 second
+- **💸 Zero Gas Fees**: Users don't pay blockchain fees
+- **🤖 AI Agent Ready**: Works with private keys (no browser needed)
+- **👤 Human Friendly**: Also works with MetaMask, WalletConnect
+- **💰 True Micropayments**: $0.001 minimum payments
+
+### 🚀 Perfect For
+
+- **API Monetization**: Weather APIs, stock data, news feeds
+- **AI Services**: Image generation, text generation, voice synthesis
+- **Content Paywalls**: Premium articles, videos, research papers
+- **Data Services**: Analytics, database queries, file storage
+- **AI Agent Payments**: Autonomous bots paying for services
+
+### 📖 Learn More
+
+- **[X402 Middleware Guide](Core-Blockchain/x402-middleware/README.md)** - Start here! 1-line integration
+- **[X402 Overview](docs/x402/README.md)** - Complete X402 documentation
+- **[Developer Pitch](docs/x402/DEVELOPER_PITCH.md)** - Why X402 is revolutionary
+
+---
 
 ## 💼 Use Cases
 
