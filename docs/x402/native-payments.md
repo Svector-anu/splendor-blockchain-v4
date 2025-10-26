@@ -23,7 +23,7 @@ const { splendorX402Express } = require('./x402-middleware');
 
 // Add payments in 1 line!
 app.use('/api', splendorX402Express({
-  payTo: '0xYourWalletAddress',  // You get 90% of payments
+  payTo: '0xYourWalletAddress',  // You get 100% of payments
   pricing: {
     '/api/weather': '0.001',     // $0.001 per request
     '/api/premium': '0.01'       // $0.01 per request
@@ -34,8 +34,7 @@ app.use('/api', splendorX402Express({
 app.get('/api/weather', (req, res) => {
   res.json({ 
     weather: 'Sunny, 75°F',
-    payment: req.x402,
-    yourRevenue: '$0.0009'  // You earned 90%
+    payment: req.x402
   });
 });
 ```
@@ -60,7 +59,7 @@ curl http://localhost:3000/api/premium
 |---------|-------------------|------------------|--------------|---------------|
 | **Settlement Speed** | **<100ms** | 2-15 seconds | 12-15 seconds | **150x faster** |
 | **User Gas Fees** | **$0** | $0.01-$50 | $1-$50 | **100% savings** |
-| **Developer Revenue** | **90% guaranteed** | Variable | N/A | **Predictable** |
+| **Developer Revenue** | **100%** | Variable | N/A | **Keep everything** |
 | **Integration** | **1 line of code** | 50+ lines | Complex | **50x simpler** |
 | **Consensus Level** | **✅ Native** | ❌ External | ❌ External | **Revolutionary** |
 | **TPS Capability** | **Millions** | ~50,000 | ~15 | **20x+ higher** |
@@ -78,7 +77,7 @@ curl http://localhost:3000/api/premium
 - **Others**: 2-15 seconds for blockchain confirmation
 
 #### 3. **Developer-First**
-- **Splendor**: 90% revenue share, 1-line integration
+- **Splendor**: 100% revenue, 1-line integration
 - **Others**: Variable fees, complex integration
 
 #### 4. **User Experience**
@@ -95,28 +94,19 @@ curl http://localhost:3000/api/premium
 
 ### 1. Consensus Layer Integration
 
-Unlike external solutions, Splendor's x402 is built into the consensus engine:
+Unlike external solutions, Splendor's x402 is built into the consensus engine with **zero-fee policy**:
 
 ```go
-// In consensus/congress/congress_govern.go
-if tx.Type() == types.X402TxType {
-    // Native x402 settlement in consensus
-    var p x402Payload
-    if err = rlp.DecodeBytes(tx.Data(), &p); err != nil {
-        vmerr = fmt.Errorf("x402: invalid payload: %w", err)
-        return
-    }
-    
-    // Direct state manipulation - no gas fees
-    state.SubBalance(p.From, p.Value)
-    state.AddBalance(p.To, p.Value)
-    
-    // Automatic revenue sharing
-    validatorFee := amount * 5 / 100    // 5% to validator
-    protocolFee := amount * 5 / 100     // 5% to protocol
-    apiProviderFee := amount * 90 / 100  // 90% to developer
-}
+// From core/types/x402_tx.go
+// Gas fields are kept for EIP-1559 compatibility but x402 consensus 
+// execution ignores fees (zero-fee policy).
+
+// Direct payment transfer - no deductions
+state.SubBalance(payload.From, payload.Value)
+state.AddBalance(payload.To, payload.Value)
 ```
+
+**Full payment amount goes directly to the recipient - no fees!**
 
 ### 2. Native RPC API
 
@@ -141,24 +131,22 @@ curl -X POST -H "Content-Type: application/json" \
 
 ## 💰 Revenue Model
 
-### Automatic Revenue Distribution
+### Zero-Fee Payments
 
-Every x402 payment is automatically split:
+Every x402 payment goes 100% to the API provider:
 
 ```
 User Payment: $0.001 SPLD
-├── API Provider: $0.0009 SPLD (90%) ← YOU
-├── Validator: $0.00005 SPLD (5%) ← NETWORK SECURITY
-└── Protocol: $0.00005 SPLD (5%) ← DEVELOPMENT FUND
+└── API Provider: $0.001 SPLD (100%) ← YOU
 
-Blockchain Charges: $0.00 ← NO FEES!
+Gas Fees: $0.00 ← NO FEES!
 ```
 
 ### Revenue Examples
 
-- **Weather API**: 1000 requests/day × $0.001 = **$27/month** for you
-- **AI Images**: 100 images/day × $0.05 = **$135/month** for you  
-- **Analytics**: 50 reports/day × $0.10 = **$135/month** for you
+- **Weather API**: 1000 requests/day × $0.001 = **$1/day = $30/month**
+- **AI Images**: 100 images/day × $0.05 = **$5/day = $150/month**  
+- **Analytics**: 50 reports/day × $0.10 = **$5/day = $150/month**
 
 ---
 
@@ -237,41 +225,11 @@ Example `permit` in x402 payload:
 
 ---
 
-## Developer Summary: Permit & ERC‑20 Compatibility
-
-### Permit Support (EIP‑2612)
-- Implements the standard `permit(address owner, address spender, uint256 value, uint256 deadline, uint8 v, bytes32 r, bytes32 s)` flow.
-- Lets users set allowances with an off‑chain signature instead of an on‑chain `approve()`.
-- If a token deviates from the spec (custom domain/version), `permit` may revert; we automatically fall back to checking standard `allowance`.
-
-### ERC‑20 Transfer Return Handling
-- Legacy tokens: `transfer`/`transferFrom` may return no data → treated as success.
-- Standard tokens: 32‑byte boolean is decoded and validated.
-
-### Security Guarantees
-- Consensus path enforces:
-  - Strict x402 payment signature (EIP‑191 message binding addresses, value, time window, asset, chainId).
-  - Permit deadline checks (if present) and on‑chain verification by the token contract (EIP‑2612).
-  - Nonce replay protection persisted on chain per (payer, nonce).
-
----
-
-## Non‑Technical Summary (Investors / Stakeholders)
-- Gasless approvals: users authorize with a signature instead of paying for two transactions.
-- Broad compatibility: works with legacy and modern ERC‑20 tokens; falls back to normal allowance if `permit` isn’t supported.
--- Security built‑in: authorizations are time‑limited, single‑use, and cryptographically verified on chain.
-- Future‑proof: handles both legacy behaviors and newer standards seamlessly.
-
-### Monitor Your Revenue
+## 📊 Monitor Your Revenue
 ```bash
-# Check your wallet balance (your 90% share)
+# Check your wallet balance (100% of all payments)
 curl -X POST -H "Content-Type: application/json" \
   --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0xYourWallet","latest"],"id":1}' \
-  https://mainnet-rpc.splendor.org/
-
-# Get x402 revenue statistics
-curl -X POST -H "Content-Type: application/json" \
-  --data '{"jsonrpc":"2.0","method":"x402_getRevenueStats","params":[],"id":1}' \
   https://mainnet-rpc.splendor.org/
 ```
 
@@ -305,7 +263,7 @@ curl -X POST -H "Content-Type: application/json" \
 ```javascript
 const middleware = splendorX402Express({
   // Required
-  payTo: '0xYourWalletAddress',        // Your wallet (receives 90%)
+  payTo: '0xYourWalletAddress',        // Your wallet (receives 100%)
   
   // Optional
   rpcUrl: 'http://localhost:80',       // Splendor RPC endpoint
@@ -344,7 +302,7 @@ Splendor's native x402 implementation represents a **paradigm shift** in blockch
 - **⚡ 150x faster** than external x402 solutions
 - **💰 Zero gas fees** for users
 - **🔧 1-line integration** for developers
-- **📈 90% revenue share** guaranteed
+- **📈 100% revenue** - keep everything you earn
 - **🔄 Hot upgrades** for existing chains
 
 **Welcome to the future of internet payments!** 🚀

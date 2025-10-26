@@ -10,21 +10,18 @@ The world's first **native x402 implementation** built directly into a blockchai
 - **HTTP Native**: Standard x402 protocol over HTTP
 - **Framework Support**: Express.js, Fastify, and more
 - **$0.001 Minimum**: Smallest payments in crypto
-- **💎 Validator Revenue**: 5% of all payments go to validators
-- **🏦 Protocol Revenue**: 5% of all payments go to core blockchain
+- **100% Revenue**: API providers keep all payment revenue
 
 ## 💰 Revenue Model
 
-### **Automatic Revenue Split (Per Payment)**
+### **Zero-Fee Payments**
 
 ```
 User Payment: $0.001 SPLD
-├── API Provider: $0.0009 SPLD (90%) ← YOU (THE DEVELOPER)
-├── Validators: $0.00005 SPLD (5%) ← NETWORK VALIDATORS
-└── Core Blockchain: $0.00005 SPLD (5%) ← PROTOCOL FEE
+└── API Provider: $0.001 SPLD (100%) ← YOU (THE DEVELOPER)
 ```
 
-**You keep 90% of all payments to your API!**
+**You keep 100% of all payments to your API - NO FEES!**
 
 ## 📦 Installation
 
@@ -47,7 +44,7 @@ const app = express();
 
 // Add x402 payments to your API in 1 line
 app.use('/api', splendorX402Express({
-  payTo: '0xYourWalletAddress',        // You get 90% of payments
+  payTo: '0xYourWalletAddress',        // You get 100% of payments
   rpcUrl: 'http://splendor-rpc:80',    // Splendor RPC endpoint
   pricing: {
     '/api/weather': '0.001',           // $0.001 per weather request
@@ -61,16 +58,14 @@ app.use('/api', splendorX402Express({
 app.get('/api/weather', (req, res) => {
   res.json({ 
     weather: 'Sunny, 75°F',
-    payment: req.x402,  // Payment details
-    revenue: 'You earned $0.0009 from this request!'
+    payment: req.x402  // Payment details
   });
 });
 
 app.get('/api/premium', (req, res) => {
   res.json({ 
     data: 'Premium content here',
-    payment: req.x402,
-    revenue: 'You earned $0.009 from this request!'
+    payment: req.x402
   });
 });
 
@@ -95,8 +90,7 @@ fastify.register(splendorX402Fastify, {
 fastify.get('/api/premium', async (request, reply) => {
   return { 
     message: 'Premium content!',
-    payment: request.x402,
-    revenue: 'You earned 90% of this payment!'
+    payment: request.x402
   };
 });
 
@@ -113,11 +107,9 @@ fastify.listen(3000);
 │ 2. Get 402      │◀───│ 3. Return 402    │    │                 │
 │ 3. Sign Payment │    │                  │    │                 │
 │ 4. Send Payment │───▶│ 5. Verify & Settle──▶│ 6. Instant TX   │
-│ 5. Get Content  │◀───│ 6. Return Content│◀───│ 7. Revenue Split│
+│ 5. Get Content  │◀───│ 6. Return Content│◀───│ 7. Full Payment │
 └─────────────────┘    └──────────────────┘    └─────────────────┘
-                                                │ 90% → You       │
-                                                │ 5% → Validators │
-                                                │ 5% → Protocol   │
+                                                │ 100% → You      │
                                                 └─────────────────┘
 ```
 
@@ -143,9 +135,9 @@ curl http://localhost:3000/api/premium
 }
 ```
 
-### 2. Client Creates Payment Signature (No EIP-3009!)
+### 2. Client Creates Payment Signature
 ```javascript
-// Simple message signing (much easier than EIP-3009)
+// Simple message signing (no EIP-3009!)
 const payment = {
   x402Version: 1,
   scheme: "exact",
@@ -157,7 +149,7 @@ const payment = {
     validAfter: Math.floor(Date.now() / 1000),
     validBefore: Math.floor(Date.now() / 1000) + 3600,
     nonce: "0x" + crypto.randomBytes(32).toString('hex'),
-    signature: "0x..." // Simple signature, not EIP-3009
+    signature: "0x..." // Simple signature
   }
 };
 ```
@@ -168,7 +160,7 @@ curl -H "X-Payment: $(echo $PAYMENT | base64)" \
      http://localhost:3000/api/premium
 ```
 
-**Response: 200 OK + Content + Revenue Split**
+**Response: 200 OK + Content**
 ```json
 {
   "message": "Premium content!",
@@ -181,17 +173,14 @@ curl -H "X-Payment: $(echo $PAYMENT | base64)" \
 }
 ```
 
-**What happens behind the scenes:**
-- ✅ **You get**: $0.0009 (90%)
-- ✅ **Validator gets**: $0.00005 (5%)
-- ✅ **Protocol gets**: $0.00005 (5%)
+**What happens:** Full $0.001 payment goes to your wallet instantly!
 
 ## ⚙️ Configuration Options
 
 ```javascript
 const middleware = splendorX402Express({
   // Required
-  payTo: '0xYourWalletAddress',        // Where YOUR 90% goes
+  payTo: '0xYourWalletAddress',        // Your wallet (receives 100%)
   
   // Optional
   rpcUrl: 'http://localhost:80',       // Splendor RPC endpoint
@@ -199,12 +188,13 @@ const middleware = splendorX402Express({
   chainId: 2691,                       // Splendor chain ID
   defaultPrice: '0.001',               // Default price in USD
   
-  // Pricing rules
+  // Pricing rules (flexible patterns)
   pricing: {
     '/api/free': '0',                  // Free endpoint
-    '/api/premium': '0.001',           // $0.001 per request
-    '/api/data/*': '0.01',             // $0.01 for wildcard paths
-    '/api/analytics': '0.05'           // $0.05 for analytics
+    '/api/premium': '0.001',           // Fixed price
+    '/api/data/*': '0.01',             // Wildcard pattern
+    '/api/analytics': '0.05',          // Higher value content
+    '/api/bulk/*': '0.0001'            // Bulk pricing
   }
 });
 ```
@@ -217,9 +207,15 @@ cd Core-Blockchain
 ./node-start.sh --rpc
 ```
 
-### **2. (Optional) Run Example Server**
+### **2. Install Dependencies**
 ```bash
-SPLENDOR_RPC=https://mainnet-rpc.splendor.org/ node Core-Blockchain/examples/x402-middleware-server.js
+cd x402-middleware
+npm install
+```
+
+### **3. Run Test Server**
+```bash
+npm test
 ```
 
 ### **4. Test Endpoints**
@@ -227,7 +223,7 @@ SPLENDOR_RPC=https://mainnet-rpc.splendor.org/ node Core-Blockchain/examples/x40
 # Free endpoint (no payment required)
 curl http://localhost:3000/api/free
 
-# Paid endpoint (returns 402 Payment Required until paid)
+# Paid endpoint (returns 402 Payment Required)
 curl -i http://localhost:3000/api/premium
 
 # Health check
@@ -240,9 +236,21 @@ curl http://localhost:3000/health
 ```javascript
 const axios = require('axios');
 const crypto = require('crypto');
+const { ethers } = require('ethers');
 
-// Create payment signature (simplified - no EIP-3009!)
-function createPayment(from, to, amount) {
+// Create payment signature
+async function createPayment(wallet, to, amount) {
+  const from = wallet.address;
+  const validAfter = Math.floor(Date.now() / 1000);
+  const validBefore = validAfter + 3600;
+  const nonce = "0x" + crypto.randomBytes(32).toString('hex');
+  const asset = "0x0000000000000000000000000000000000000000";
+  const chainId = 2691;
+  
+  // Sign message
+  const message = `x402-payment:${from}:${to}:${amount}:${validAfter}:${validBefore}:${nonce}:${asset}:${chainId}`;
+  const signature = await wallet.signMessage(message);
+  
   return {
     x402Version: 1,
     scheme: "exact", 
@@ -250,10 +258,11 @@ function createPayment(from, to, amount) {
     payload: {
       from, to, 
       value: amount,
-      validAfter: Math.floor(Date.now() / 1000),
-      validBefore: Math.floor(Date.now() / 1000) + 3600,
-      nonce: "0x" + crypto.randomBytes(32).toString('hex'),
-      signature: "0x..." // Sign with wallet (simple message signing)
+      validAfter,
+      validBefore,
+      nonce,
+      asset,
+      signature
     }
   };
 }
@@ -270,7 +279,8 @@ async function paidRequest(url, payment) {
 }
 
 // Usage
-const payment = createPayment(userAddress, apiProviderAddress, "0.001");
+const wallet = new ethers.Wallet('0xYourPrivateKey');
+const payment = await createPayment(wallet, apiProviderAddress, "0x38d7ea4c68000"); // 0.001 SPLD
 const result = await paidRequest('http://api.example.com/premium', payment);
 ```
 
@@ -281,8 +291,25 @@ import json
 import base64
 import hashlib
 import time
+from eth_account import Account
+from eth_account.messages import encode_defunct
 
-def create_payment(from_addr, to_addr, amount):
+def create_payment(private_key, to_addr, amount):
+    account = Account.from_key(private_key)
+    from_addr = account.address
+    valid_after = int(time.time())
+    valid_before = valid_after + 3600
+    nonce = "0x" + hashlib.sha256(str(time.time()).encode()).hexdigest()
+    asset = "0x0000000000000000000000000000000000000000"
+    chain_id = 2691
+    
+    # Create message
+    message = f"x402-payment:{from_addr}:{to_addr}:{amount}:{valid_after}:{valid_before}:{nonce}:{asset}:{chain_id}"
+    
+    # Sign message
+    message_hash = encode_defunct(text=message)
+    signed = account.sign_message(message_hash)
+    
     return {
         "x402Version": 1,
         "scheme": "exact",
@@ -291,10 +318,11 @@ def create_payment(from_addr, to_addr, amount):
             "from": from_addr,
             "to": to_addr,
             "value": amount,
-            "validAfter": int(time.time()),
-            "validBefore": int(time.time()) + 3600,
-            "nonce": "0x" + hashlib.sha256(str(time.time()).encode()).hexdigest(),
-            "signature": "0x..."  # Sign with wallet
+            "validAfter": valid_after,
+            "validBefore": valid_before,
+            "nonce": nonce,
+            "asset": asset,
+            "signature": signed.signature.hex()
         }
     }
 
@@ -310,7 +338,7 @@ def paid_request(url, payment):
     return response.json()
 
 # Usage
-payment = create_payment(user_address, api_provider_address, "0.001")
+payment = create_payment('0xYourPrivateKey', api_provider_address, "0x38d7ea4c68000")
 result = paid_request('http://api.example.com/premium', payment)
 ```
 
@@ -323,15 +351,15 @@ result = paid_request('http://api.example.com/premium', payment)
 | **Fees** | **None** | Gas fees | 2.9% + $0.30 |
 | **TPS** | **Millions** | ~50,000 | ~65,000 |
 | **Integration** | **1 line** | Multiple steps | Complex |
-| **Revenue Share** | **90% to you** | Variable | ~97% to you |
+| **Revenue** | **100% to you** | Variable | ~97% to you |
 | **EIP-3009** | **Not needed** | Required | N/A |
 
 ## 📚 API Reference
 
 ### Middleware Options
 
-- `payTo` (string, required): Your wallet address (receives 90%)
-- `rpcUrl` (string): Splendor RPC endpoint (default: 'http://localhost:80'). For mainnet use `https://mainnet-rpc.splendor.org/`.
+- `payTo` (string, required): Your wallet address (receives 100% of payments)
+- `rpcUrl` (string): Splendor RPC endpoint (default: 'http://localhost:80')
 - `network` (string): Network name (default: 'splendor')
 - `chainId` (number): Chain ID (default: 2691)
 - `pricing` (object): Path-to-price mapping
@@ -342,123 +370,20 @@ result = paid_request('http://api.example.com/premium', payment)
 After successful payment, requests include:
 ```javascript
 req.x402 = {
-  paid: true,                    // Payment successful
-  amount: "0.001",              // Amount paid (USD)
-  txHash: "0x...",              // Transaction hash
-  payer: "0x...",               // Payer address
-  yourRevenue: "0.0009"         // Your 90% share
+  paid: true,          // Payment successful
+  amount: "0.001",     // Amount paid (USD)
+  txHash: "0x...",     // Transaction hash
+  payer: "0x..."       // Payer address
 }
 ```
-
-### Response Headers
-
-Successful payments include:
-```
-X-Payment-Response: eyJzdWNjZXNzIjp0cnVlLCJ0eEhhc2giOiIweDEyMyIsIm5ldHdvcmtJZCI6InNwbGVuZG9yIn0=
-```
-
-## 🚀 Production Deployment
-
-### 1. Configure Your Splendor Node
-```bash
-# Start with RPC enabled
-./node-start.sh --rpc --http.addr 0.0.0.0 --http.port 80
-```
-
-### 2. Set Up Load Balancer
-```nginx
-upstream splendor_rpc {
-    server rpc1.yourdomain.com:80;
-    server rpc2.yourdomain.com:80;
-    server rpc3.yourdomain.com:80;
-}
-
-server {
-    listen 80;
-    location / {
-        proxy_pass http://splendor_rpc;
-    }
-}
-```
-
-### 3. Environment Variables
-```bash
-export SPLENDOR_RPC_URL=http://your-load-balancer:80
-export PAYMENT_ADDRESS=0xYourDeveloperAddress
-export NODE_ENV=production
-```
-
-## 💡 Real-World Examples
-
-### **Weather API Service**
-```javascript
-app.use('/weather', splendorX402Express({
-  payTo: '0xWeatherCompanyWallet',
-  pricing: { '/weather/*': '0.001' }  // $0.001 per weather request
-}));
-
-// Revenue: 1000 requests/day = $0.90/day = $27/month
-```
-
-### **AI Image Generator**
-```javascript
-app.use('/generate', splendorX402Express({
-  payTo: '0xAICompanyWallet',
-  pricing: { '/generate/image': '0.05' }  // $0.05 per image
-}));
-
-// Revenue: 100 images/day = $4.50/day = $135/month
-```
-
-### **Data Analytics Platform**
-```javascript
-app.use('/analytics', splendorX402Express({
-  payTo: '0xAnalyticsCompanyWallet',
-  pricing: { '/analytics/report': '0.10' }  // $0.10 per report
-}));
-
-// Revenue: 50 reports/day = $4.50/day = $135/month
-```
-
-## 🤖 No EIP-3009 Complexity!
-
-**Your users don't need to understand EIP-3009 or complex crypto:**
-
-### **Standard x402 (Complex):**
-```javascript
-// Users need to understand EIP-3009, gas fees, etc.
-const authorization = {
-  from: userAddress,
-  to: recipientAddress,
-  value: amount,
-  validAfter: timestamp,
-  validBefore: timestamp + 3600,
-  nonce: randomNonce
-};
-const signature = await wallet.signTypedData(EIP3009_DOMAIN, EIP3009_TYPES, authorization);
-```
-
-### **Splendor x402 (Simple):**
-```javascript
-// Users just sign a simple message
-const message = `x402-payment:${from}:${to}:${amount}:${validAfter}:${validBefore}:${nonce}`;
-const signature = await wallet.signMessage(message);
-```
-
-**Much easier for users and developers!**
 
 ## 📊 Revenue Tracking
 
 ### **Monitor Your Earnings**
 ```bash
-# Check your wallet balance (your 90% share)
+# Check your wallet balance (100% of all payments)
 curl -X POST -H "Content-Type: application/json" \
   --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0xYourWalletAddress","latest"],"id":1}' \
-  http://splendor-rpc:80
-
-# Get x402 payment statistics
-curl -X POST -H "Content-Type: application/json" \
-  --data '{"jsonrpc":"2.0","method":"x402_getRevenueStats","params":[],"id":1}' \
   http://splendor-rpc:80
 ```
 
@@ -488,68 +413,10 @@ curl -X POST -H "Content-Type: application/json" \
 - **Music Streaming**: $0.001 per song
 - **E-books**: $0.50 per book
 
-## ⚙️ Configuration Options
-
-```javascript
-const middleware = splendorX402Express({
-  // Required
-  payTo: '0xYourWalletAddress',        // Where YOUR 90% goes
-  
-  // Optional
-  rpcUrl: 'http://localhost:80',       // Splendor RPC endpoint
-  network: 'splendor',                 // Network name
-  chainId: 2691,                       // Splendor chain ID
-  defaultPrice: '0.001',               // Default price in USD
-  
-  // Pricing rules (flexible patterns)
-  pricing: {
-    '/api/free': '0',                  // Free endpoint
-    '/api/premium': '0.001',           // Fixed price
-    '/api/data/*': '0.01',             // Wildcard pattern
-    '/api/analytics': '0.05',          // Higher value content
-    '/api/bulk/*': '0.0001'            // Bulk pricing
-  }
-});
-```
-
-## 🧪 Testing Your Implementation
-
-### **1. Start Splendor Node**
-```bash
-cd Core-Blockchain
-./node-start.sh --rpc
-```
-
-### **2. Install Dependencies**
-```bash
-cd x402-middleware
-npm install
-```
-
-### **3. Run Test Server**
-```bash
-npm test
-```
-
-### **4. Test Different Endpoints**
-```bash
-# Free endpoint (no payment required)
-curl http://localhost:3000/api/free
-# Returns: {"message":"This is a free endpoint!","paid":false}
-
-# Paid endpoint (returns 402 Payment Required)
-curl http://localhost:3000/api/premium
-# Returns: 402 with payment requirements
-
-# Health check
-curl http://localhost:3000/health
-# Returns: {"status":"OK","timestamp":...}
-```
-
 ## 🌟 Why Choose Splendor x402?
 
 ### **For Developers:**
-- **90% revenue share** (you keep most of the money)
+- **100% revenue** (you keep ALL the money)
 - **1-line integration** (add payments instantly)
 - **No crypto complexity** (HTTP-native)
 - **Instant settlement** (no waiting for confirmations)
@@ -566,75 +433,17 @@ curl http://localhost:3000/health
 
 | Feature | **Splendor x402** | Standard x402 | Credit Cards |
 |---------|------------------|---------------|--------------|
-| **Your Revenue** | **90%** | Variable | ~97% |
+| **Your Revenue** | **100%** | Variable | ~97% |
 | **Settlement** | **Instant** | 2+ seconds | 2-3 days |
 | **Minimum** | **$0.001** | $0.001 | $0.50+ |
-| **User Fees** | **None** | Gas fees | None |
+| **User Fees** | **$0** | Gas fees | $0 |
 | **Integration** | **1 line** | Multiple steps | Complex |
-| **Crypto Knowledge** | **None needed** | EIP-3009 required | None |
-
-## 📚 API Reference
-
-### Middleware Options
-
-- `payTo` (string, required): Your wallet address (receives 90%)
-- `rpcUrl` (string): Splendor RPC endpoint
-- `network` (string): Network name (default: 'splendor')
-- `chainId` (number): Chain ID (default: 2691)
-- `pricing` (object): Path-to-price mapping
-- `defaultPrice` (string): Default price in USD
-
-### Request Object Extensions
-
-After successful payment:
-```javascript
-req.x402 = {
-  paid: true,                    // Payment successful
-  amount: "0.001",              // Amount paid (USD)
-  txHash: "0x...",              // Transaction hash
-  payer: "0x...",               // Payer address
-  yourRevenue: "0.0009",        // Your 90% share
-  validatorRevenue: "0.00005",  // Validator 5% share
-  protocolRevenue: "0.00005"    // Protocol 5% share
-}
-```
-
-## 🚀 Production Deployment
-
-### 1. Configure Your Splendor Node
-```bash
-# Start with RPC enabled
-./node-start.sh --rpc --http.addr 0.0.0.0 --http.port 80
-```
-
-### 2. Set Up Load Balancer
-```nginx
-upstream splendor_rpc {
-    server rpc1.yourdomain.com:80;
-    server rpc2.yourdomain.com:80;
-    server rpc3.yourdomain.com:80;
-}
-
-server {
-    listen 80;
-    location / {
-        proxy_pass http://splendor_rpc;
-    }
-}
-```
-
-### 3. Environment Variables
-```bash
-export SPLENDOR_RPC_URL=http://your-load-balancer:80
-export PAYMENT_ADDRESS=0xYourDeveloperAddress
-export NODE_ENV=production
-```
 
 ## 🎊 Ready to Monetize Your API!
 
 **With Splendor x402, you can:**
 - ✅ **Add payments to any API** in 1 line of code
-- ✅ **Keep 90% of all revenue** (best rate in crypto)
+- ✅ **Keep 100% of all revenue** (zero fees!)
 - ✅ **No gas fees** for your users (better experience)
 - ✅ **Instant settlement** (millions of TPS)
 - ✅ **No EIP-3009 complexity** (simple message signing)
