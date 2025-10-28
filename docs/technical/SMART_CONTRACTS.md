@@ -29,8 +29,17 @@ npm init -y
 npm install --save-dev hardhat
 
 # Initialize Hardhat project
-npx hardhat init
+npx hardhat --init
 ```
+### Note: When you run npx hardhat, you'll see an interactive menu with options to:
+
+Create a JavaScript project
+Create a TypeScript project
+Create an empty hardhat.config.js
+
+Choose the option that best fits your project needs.
+
+
 
 ### Install Dependencies
 
